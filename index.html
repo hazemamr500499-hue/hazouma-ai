@@ -1156,21 +1156,27 @@ a{ color:var(--accent-1); text-decoration:none; }
 /* ==========================================================================
    Hazouma AI — Single File Application
    المطوّر: حازم
-   نسخة معدّلة: إصلاح الاتصال والمصادقة وطريقة إرسال المفتاح.
+   نسخة معدّلة: دعم كامل لمفاتيح المصادقة الحديثة (تبدأ بـ AQ.)
    ========================================================================== */
 (function () {
   "use strict";
+
+  /* ======================================================================
+     🔑 ضع مفتاحك هنا مباشرة
+     ====================================================================== */
+
+  const API_KEY = "AQ.Ab8RN6LAR_VTGsn1-O_YZYWkfw-2PF_Om23MsT24d-99Zr1Nug";
 
   /* ======================================================================
      1) الإعدادات العامة
      ====================================================================== */
 
   const CONFIG = {
-    /* لا تضع المفتاح الحقيقي داخل ملف HTML. سيتم أخذه من sessionStorage. */
-    API_KEY: "AQ.Ab8RN6LAR_VTGsn1-O_YZYWkfw-2PF_Om23MsT24d-99Zr1Nug",
+    /* المفتاح مأخوذ من الثابت بالأعلى (يمكن تجاوزه من sessionStorage) */
+    API_KEY: API_KEY,
 
     /* النموذج الحالي المدعوم */
-    MODEL: "gemini-3.5-flash",
+    MODEL: "gemini-2.5-flash",
 
     /* الحد الأقصى لحجم الملف الواحد بالميجابايت */
     MAX_FILE_MB: 8,
@@ -1203,8 +1209,8 @@ a{ color:var(--accent-1); text-decoration:none; }
 
 أسلوبك في الحوار:
 - بتتكلم مصري بسيط، ودود، حماسي، وواثق من غير تعجرف.
+- بترد بنفس لغة المستخدم (عربي ⇒ عربي، إنجليزي ⇒ إنجليزي، فرنسي ⇒ فرنسي... وهكذا).
 - بتشرح ببساطة وبتدّي أمثلة عملية، وبتشجّع المستخدم إنه يجرّب ويتعلم بنفسه.
-- بترد بنفس لغة المستخدم (عربي ⇒ عربي، إنجليزي ⇒ إنجليزي).
 - لو مش عارف حاجة، بتقول بصراحة إنك مش متأكد وبتنصح المستخدم يتأكد من مصدر موثوق.
 - متخترعش حقائق ولا معلومات مضللة أبداً.
 
@@ -2260,13 +2266,17 @@ a{ color:var(--accent-1); text-decoration:none; }
     return key;
   }
 
-  /** استدعاء الخدمة بالطريقة الرسمية الحالية */
+  /* ======================================================================
+     استدعاء الخدمة — يدعم صيغ المفاتيح القديمة (AIza...) والحديثة (AQ.)
+     ====================================================================== */
+
   async function callModel(session) {
     const apiKey = getApiKey();
     if (!apiKey) {
       throw new Error("NO_API_KEY");
     }
 
+    /* نستخدم رابط generateContent الأساسي */
     const url =
       "https://generativelanguage.googleapis.com/v1beta/models/" +
       CONFIG.MODEL +
@@ -2291,15 +2301,22 @@ a{ color:var(--accent-1); text-decoration:none; }
       ]
     };
 
+    /* اختيار طريقة المصادقة حسب نوع المفتاح:
+       - المفاتيح الحديثة (AQ.) تُرسل كـ Bearer token في ترويسة Authorization.
+       - المفاتيح القديمة (AIza...) تُرسل في ترويسة x-goog-api-key. */
+    const headers = { "Content-Type": "application/json" };
+
+    if (/^AQ\./i.test(apiKey)) {
+      headers["Authorization"] = "Bearer " + apiKey;
+    } else {
+      headers["x-goog-api-key"] = apiKey;
+    }
+
     let response;
     try {
       response = await fetch(url, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          /* المفتاح في الترويسة */
-          "x-goog-api-key": apiKey
-        },
+        headers: headers,
         body: JSON.stringify(body)
       });
     } catch (networkErr) {
@@ -2458,7 +2475,7 @@ a{ color:var(--accent-1); text-decoration:none; }
       } else if (/400|invalid argument|INVALID_ARGUMENT/i.test(msg)) {
         friendly = "⚠️ **الخدمة رفضت بيانات الطلب.**\n\nراجع الرسالة أو المرفقات، ولو المشكلة مستمرة افتح Console وشوف نص الخطأ الأصلي.";
       } else if (/404|not found|NOT_FOUND|no longer available/i.test(msg)) {
-        friendly = "🔎 **النموذج غير متاح من مشروعك.**\n\nالكود يستخدم `النموذج المطلوب غير متاح؛ راجع النماذج المتاحة من إعدادات المشروع.";
+        friendly = "🔎 **النموذج غير متاح من مشروعك.**\n\nالكود يستخدم `" + CONFIG.MODEL + "` — راجع النماذج المتاحة من إعدادات المشروع.";
       } else if (msg) {
         friendly = "⚠️ **حصل خطأ:**\n\n`" + msg + "`";
       }
@@ -2564,8 +2581,7 @@ a{ color:var(--accent-1); text-decoration:none; }
   function init() {
     /* كل وحدة معزولة في try/catch مستقل — فشل وحدة واحدة (زي initSpeech
        في بيئة بتمنع المايك) لن يوقف باقي الوحدات (زي إرسال الرسائل
-       والقائمة الجانبية) عن العمل. هذا هو الإصلاح الأساسي لمشكلة
-       "الأزرار مش بترد" لما يحصل خطأ غير متوقع في وحدة واحدة فقط. */
+       والقائمة الجانبية) عن العمل. */
 
     safeInit("loadState", loadState);
     safeInit("initSidebar", initSidebar);
@@ -2586,10 +2602,7 @@ a{ color:var(--accent-1); text-decoration:none; }
       setTimeout(() => els.input.focus(), 260);
     }
 
-    /* منع الارتداد (bounce) في السحب فوق الخلفية فقط — أبداً فوق
-       الأزرار أو الروابط أو حقول الإدخال، حتى لا نعطّل النقر عليها
-       في متصفحات الموبايل التي تُلغي حدث click لو تم استدعاء
-       preventDefault على touchmove فوق نفس العنصر. */
+    /* منع الارتداد (bounce) في السحب فوق الخلفية فقط */
     document.addEventListener("touchmove", (e) => {
       if (e.target.closest(".chat-scroll, .chat-list, .attach-preview, #input, button, a, textarea, input")) return;
       if (e.cancelable) e.preventDefault();
