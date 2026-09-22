@@ -1156,16 +1156,27 @@ a{ color:var(--accent-1); text-decoration:none; }
 /* ==========================================================================
    Hazouma AI — Single File Application
    المطوّر: حازم
-   نسخة معدّلة: دعم كامل لمفاتيح المصادقة الحديثة (تبدأ بـ AQ.)
+   نسخة مُصلَّحة: إصلاح جذري لمشكلة مصادقة مفاتيح Gemini الحديثة (AQ.)
    ========================================================================== */
 (function () {
   "use strict";
 
   /* ======================================================================
      🔑 ضع مفتاحك هنا مباشرة
+
+     ⚠️ تحذير أمان مهم جداً:
+     - الملف ده هيتحط على الإنترنت (GitHub / Vercel)، وأي حد يقدر يفتح
+       "Page Source" أو DevTools ويشوف المفتاح ويستخدمه على حسابك.
+     - متحطش مفتاحك الحقيقي جوه ملف عام (Public Repo) أبداً.
+     - لو سبق وحطيت مفتاح حقيقي في أي مكان (حتى في شات أو مستند)، اعتبره
+       "مكشوف" وامسحه (Delete) من https://aistudio.google.com/apikey
+       واعمل مفتاح جديد بدل منه فوراً.
+     - الحل الآمن الحقيقي (لو حبيت تتطور لاحقاً): تعمل سيرفر بسيط (Proxy)
+       يخبي المفتاح، والمتصفح يكلم السيرفر مش Gemini مباشرة. بس للمشروع
+       الشخصي/التعليمي ده، سيبناه بالطريقة البسيطة زي ما طلبت.
      ====================================================================== */
 
-  const API_KEY = "AQ.Ab8RN6LAR_VTGsn1-O_YZYWkfw-2PF_Om23MsT24d-99Zr1Nug";
+  const API_KEY = "ضع_مفتاحك_هنا";
 
   /* ======================================================================
      1) الإعدادات العامة
@@ -2252,7 +2263,7 @@ a{ color:var(--accent-1); text-decoration:none; }
 
   function askForApiKey() {
     const current = getApiKey();
-    if (current) return current;
+    if (current && current !== "ضع_مفتاحك_هنا") return current;
 
     const entered = window.prompt(
       "دخل مفتاح الخدمة الجديد هنا.\n\n" +
@@ -2267,12 +2278,21 @@ a{ color:var(--accent-1); text-decoration:none; }
   }
 
   /* ======================================================================
-     استدعاء الخدمة — يدعم صيغ المفاتيح القديمة (AIza...) والحديثة (AQ.)
+     استدعاء الخدمة
+
+     🔧 الإصلاح الجذري:
+     مفاتيح Gemini الحديثة (تبدأ بـ AQ.) ومفاتيح Gemini القديمة (تبدأ بـ
+     AIzaSy) الاتنين لازم يتبعتوا في نفس الهيدر: x-goog-api-key.
+     إرسال مفتاح AQ. كـ "Authorization: Bearer" هو اللي كان بيسبب خطأ
+     401 UNAUTHENTICATED / ACCESS_TOKEN_TYPE_UNSUPPORTED اللي شايفينه في
+     السكرين شوت. التوثيق الرسمي من Google وتقارير مطورين كتير أكدوا إن
+     x-goog-api-key هو الهيدر الصحيح للنوعين مع endpoint الـ REST بتاع
+     generateContent.
      ====================================================================== */
 
   async function callModel(session) {
     const apiKey = getApiKey();
-    if (!apiKey) {
+    if (!apiKey || apiKey === "ضع_مفتاحك_هنا") {
       throw new Error("NO_API_KEY");
     }
 
@@ -2301,16 +2321,12 @@ a{ color:var(--accent-1); text-decoration:none; }
       ]
     };
 
-    /* اختيار طريقة المصادقة حسب نوع المفتاح:
-       - المفاتيح الحديثة (AQ.) تُرسل كـ Bearer token في ترويسة Authorization.
-       - المفاتيح القديمة (AIza...) تُرسل في ترويسة x-goog-api-key. */
-    const headers = { "Content-Type": "application/json" };
-
-    if (/^AQ\./i.test(apiKey)) {
-      headers["Authorization"] = "Bearer " + apiKey;
-    } else {
-      headers["x-goog-api-key"] = apiKey;
-    }
+    /* كل أنواع المفاتيح (AIzaSy... القديم و AQ.... الحديث) بتتبعت بنفس
+       الطريقة: هيدر x-goog-api-key. مفيش داعي لأي تفرقة بينهم. */
+    const headers = {
+      "Content-Type": "application/json",
+      "x-goog-api-key": apiKey
+    };
 
     let response;
     try {
@@ -2374,7 +2390,7 @@ a{ color:var(--accent-1); text-decoration:none; }
 
     if (!rawText && !hasAttachments) return;
 
-    /* الحصول على مفتاح الجلسة بدون تخزينه داخل ملف HTML */
+    /* الحصول على مفتاح الجلسة (من الثابت بالأعلى، أو بيطلبه لو مش موجود) */
     const apiKey = askForApiKey();
     if (!apiKey) {
       toast("🔑 لم يتم إدخال مفتاح الخدمة.");
@@ -2462,8 +2478,8 @@ a{ color:var(--accent-1); text-decoration:none; }
 
       if (/^NO_API_KEY$/.test(msg)) {
         friendly = "🔑 **مفتاح الخدمة مش موجود.**\n\nدخل مفتاح جديد وجرب تاني.";
-      } else if (/API key not valid|API_KEY_INVALID|invalid.*key|invalid authentication credentials|UNAUTHENTICATED|ACCESS_TOKEN_TYPE_UNSUPPORTED/i.test(msg)) {
-        friendly = "🔑 **مفتاح الخدمة غير صالح أو مش متوافق.**\n\nأنشئ مفتاحًا جديدًا من لوحة إعداد المفتاح، وتأكد أنه كامل ومن غير مسافات أو علامات اقتباس إضافية.";
+      } else if (/API key not valid|API_KEY_INVALID|invalid.*key|invalid authentication credentials|UNAUTHENTICATED|ACCESS_TOKEN_TYPE_UNSUPPORTED|API_KEY_SERVICE_BLOCKED/i.test(msg)) {
+        friendly = "🔑 **مفتاح الخدمة غير صالح أو محظور.**\n\nروح على aistudio.google.com/apikey واتأكد إن المفتاح شغال، أو اعمل مفتاح جديد كامل من غير مسافات أو علامات اقتباس إضافية.";
       } else if (/permission denied|PERMISSION_DENIED|403/i.test(msg)) {
         friendly = "🚫 **المشروع أو مفتاح الاتصال مرفوض.**\n\nراجع حالة المفتاح والمشروع وصلاحيات الخدمة في لوحة إعداد المفتاح.";
       } else if (/quota|RESOURCE_EXHAUSTED|429/i.test(msg)) {
