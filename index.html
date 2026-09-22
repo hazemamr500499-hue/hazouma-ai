@@ -452,7 +452,7 @@ a{ color:var(--accent-1); text-decoration:none; }
 
 .chips{
   display:grid;
-  grid-template-columns:repeat(auto-fit, minmax(min(100%, 200px), 1fr));
+  grid-template-columns:repeat(auto-fit, minmax(min(100%, 240px), 1fr));
   gap:10px;
   width:100%;
 }
@@ -820,7 +820,7 @@ a{ color:var(--accent-1); text-decoration:none; }
   transition:background .15s var(--ease), color .15s var(--ease);
 }
 .attach-item:hover{ background:rgba(255,255,255,.09); color:#fff; }
-.attach-item .ai-ico{ font-size:17px; flex:0 0 auto; }
+.attach-item .attach-ico{ font-size:17px; flex:0 0 auto; }
 
 .disclaimer{
   max-width:var(--chat-max);
@@ -830,6 +830,17 @@ a{ color:var(--accent-1); text-decoration:none; }
   line-height:1.7;
   color:var(--text-dim-2);
   padding:0 8px;
+}
+
+.copyright{
+  max-width:var(--chat-max);
+  margin:5px auto 0;
+  padding:0 8px;
+  text-align:center;
+  font-size:10.5px;
+  line-height:1.7;
+  color:var(--text-dim-2);
+  opacity:.9;
 }
 
 .toast{
@@ -991,14 +1002,14 @@ a{ color:var(--accent-1); text-decoration:none; }
 
       <div class="topbar-title">
         <span class="t-main">Hazouma AI</span>
-        <span class="t-sub" id="chatTitleTop">مساعدك الذكي الشخصي</span>
+        <span class="t-sub" id="chatTitleTop">مساعدك الشخصي</span>
       </div>
 
       <div class="topbar-spacer"></div>
 
-      <div class="model-chip" title="النموذج المتصل">
+      <div class="model-chip" title="حزمة Hazouma AI 1.1">
         <span class="live-dot"></span>
-        <span>Hazouma 1.0</span>
+        <span>Hazouma AI 1.1</span>
       </div>
     </header>
 
@@ -1010,15 +1021,15 @@ a{ color:var(--accent-1); text-decoration:none; }
         <section class="welcome" id="welcome">
           <h1>
             أهلاً بيك يا بطل 👋<br>
-            أنا <span class="grad">Hazouma AI</span>
+            أنا <span class="grad">حزومة AI</span>
           </h1>
           <p class="sub">
-            مساعدك الشخصي المصمم بواسطة <strong>حازم</strong> — مبرمج ومطوّر ألعاب بـ Unity ومصمم واجهات.
+            موقعك الشخصي المصمم بواسطة <strong>حازم</strong> — مبرمج ومطوّر ألعاب بـ Unity ومصمم واجهات.
             اسألني عن البرمجة، الألعاب، التصميم، أو أي حاجة في دماغك، وهساعدك خطوة بخطوة!
           </p>
 
           <div class="chips" id="chips">
-            <button class="chip" type="button" data-prompt="عرّفني بنفسك يا حزومة، إنت مين وبتعمل إيه؟">
+            <button class="chip" type="button" data-prompt="عرّفني بنفسك يا حزومة AI، إنت مين وبتعمل إيه؟">
               <span class="chip-ico">🤖</span>
               عرّفني بنفسك
             </button>
@@ -1036,6 +1047,16 @@ a{ color:var(--accent-1); text-decoration:none; }
             <button class="chip" type="button" data-prompt="إيه أحسن نصايح لتصميم واجهة موقع UI/UX شكلها احترافي؟">
               <span class="chip-ico">🎨</span>
               نصايح تصميم UI/UX
+            </button>
+
+            <button class="chip" type="button" data-prompt="إنت تقدر تساعدني في إيه؟ قولي الخدمات والحاجات اللي تقدر تعملها باختصار.">
+              <span class="chip-ico">✨</span>
+              أساعدك في إيه؟
+            </button>
+
+            <button class="chip" type="button" data-prompt="ساعدني في فكرة تصميم جديدة لموقع أو تطبيق، واقترح شكل الواجهة والألوان وترتيب العناصر.">
+              <span class="chip-ico">🖌️</span>
+              أفكار للتصميم
             </button>
           </div>
         </section>
@@ -1066,22 +1087,22 @@ a{ color:var(--accent-1); text-decoration:none; }
 
           <div class="attach-menu" id="attachMenu" role="menu">
             <button class="attach-item" type="button" data-action="image" role="menuitem">
-              <span class="ai-ico">🖼️</span>
+              <span class="attach-ico">🖼️</span>
               <span>صورة من الجهاز</span>
             </button>
             <button class="attach-item" type="button" data-action="camera" role="menuitem">
-              <span class="ai-ico">📷</span>
+              <span class="attach-ico">📷</span>
               <span>التقاط صورة بالكاميرا</span>
             </button>
             <button class="attach-item" type="button" data-action="file" role="menuitem">
-              <span class="ai-ico">📄</span>
+              <span class="attach-ico">📄</span>
               <span>ملف / مستند</span>
             </button>
           </div>
         </div>
 
         <!-- خانة الكتابة -->
-        <textarea id="input" rows="1" placeholder="اسأل Hazouma AI أي حاجة..." dir="auto"
+        <textarea id="input" rows="1" placeholder="اسأل حزومة AI أي حاجة..." dir="auto"
                   aria-label="اكتب رسالتك"></textarea>
 
         <!-- زر المايك -->
@@ -1105,8 +1126,9 @@ a{ color:var(--accent-1); text-decoration:none; }
 
       <!-- إخلاء المسؤولية -->
       <p class="disclaimer">
-        ⚠️ الذكاء الاصطناعي قد يرتكب أخطاء، لذا يرجى التحقق من المعلومات الهامة.
+        ⚠️ راجع المعلومات المهمة قبل الاعتماد عليها.
       </p>
+      <p class="copyright">تم تطوير هذا الموقع بواسطة حازم عمرو محمد عبد الرحيم.</p>
 
     </div>
 
@@ -1134,7 +1156,7 @@ a{ color:var(--accent-1); text-decoration:none; }
 /* ==========================================================================
    Hazouma AI — Single File Application
    المطوّر: حازم
-   نسخة معدّلة: إصلاح مشكلة Gemini API والمصادقة (طريقة إرسال المفتاح + اسم النموذج).
+   نسخة معدّلة: إصلاح الاتصال والمصادقة وطريقة إرسال المفتاح.
    ========================================================================== */
 (function () {
   "use strict";
@@ -1144,12 +1166,11 @@ a{ color:var(--accent-1); text-decoration:none; }
      ====================================================================== */
 
   const CONFIG = {
-    /* ✅ ضع مفتاح Gemini API (Authorization Key) هنا — يبدأ بـ AQ. */
-    /* مثال: API_KEY: "AQ.Ab8RN6..." */
-    API_KEY: "ضع_مفتاحك_هنا",
+    /* لا تضع المفتاح الحقيقي داخل ملف HTML. سيتم أخذه من sessionStorage. */
+    API_KEY: "",
 
-    /* ✅ النموذج الحالي: gemini-3.8-flash (النموذج 2.5 متوقف) */
-    MODEL: "gemini-3.8-flash",
+    /* النموذج الحالي المدعوم */
+    MODEL: "gemini-3.5-flash",
 
     /* الحد الأقصى لحجم الملف الواحد بالميجابايت */
     MAX_FILE_MB: 8,
@@ -1170,7 +1191,7 @@ a{ color:var(--accent-1); text-decoration:none; }
      ====================================================================== */
 
   const SYSTEM_INSTRUCTIONS = `
-أنت "Hazouma AI" (حزومة إي آي)، مساعد ذكاء اصطناعي شخصي ومطوّر ذكي.
+أنت "حزومة AI"، مساعد شخصي ومطوّر ذكي.
 
 هويتك:
 - أنت النسخة الرقمية من "حازم": ولد عمره 14 سنة من الإسكندرية، مصر.
@@ -2040,7 +2061,7 @@ a{ color:var(--accent-1); text-decoration:none; }
     recognition.onerror = function (event) {
       state.isListening = false;
       els.micBtn.classList.remove("listening");
-      if (els.input) els.input.placeholder = "اسأل Hazouma AI أي حاجة...";
+      if (els.input) els.input.placeholder = "اسأل حزومة AI أي حاجة...";
 
       const err = event.error;
       if (err === "not-allowed" || err === "service-not-allowed") {
@@ -2060,7 +2081,7 @@ a{ color:var(--accent-1); text-decoration:none; }
       state.isListening = false;
       els.micBtn.classList.remove("listening");
       if (els.input) {
-        els.input.placeholder = "اسأل Hazouma AI أي حاجة...";
+        els.input.placeholder = "اسأل حزومة AI أي حاجة...";
         if (!isMobileLayout()) els.input.focus();
       }
     };
@@ -2175,7 +2196,7 @@ a{ color:var(--accent-1); text-decoration:none; }
   }
 
   /* ======================================================================
-     13) الاتصال بـ Gemini API
+     13) الاتصال بـ الخدمة
      ====================================================================== */
 
   /** بناء محتوى المحادثة المُرسَل للنموذج */
@@ -2215,12 +2236,37 @@ a{ color:var(--accent-1); text-decoration:none; }
     return contents;
   }
 
-  /** استدعاء Gemini API — إصلاح المشكلة:
-   *  1. المفتاح يُرسَل عبر ترويسة x-goog-api-key بدل ?key= في الرابط
-   *  2. النموذج هو gemini-3.8-flash (النموذج 2.5 متوقف)
-   */
-  async function callGemini(session) {
-    /* ✅ الرابط بدون ?key= — المفتاح في الترويسة */
+  function getApiKey() {
+    try {
+      const stored = sessionStorage.getItem("hazouma_api_key");
+      if (stored && stored.trim()) return stored.trim();
+    } catch (e) {}
+    return String(CONFIG.API_KEY || "").trim();
+  }
+
+  function askForApiKey() {
+    const current = getApiKey();
+    if (current) return current;
+
+    const entered = window.prompt(
+      "دخل مفتاح الخدمة الجديد هنا.\n\n" +
+      "ملاحظة: المفتاح لن يتم وضعه داخل ملف HTML، وسيتم الاحتفاظ به لهذه الجلسة فقط."
+    );
+
+    const key = String(entered || "").trim();
+    if (!key) return "";
+
+    try { sessionStorage.setItem("hazouma_api_key", key); } catch (e) {}
+    return key;
+  }
+
+  /** استدعاء الخدمة بالطريقة الرسمية الحالية */
+  async function callModel(session) {
+    const apiKey = getApiKey();
+    if (!apiKey) {
+      throw new Error("NO_API_KEY");
+    }
+
     const url =
       "https://generativelanguage.googleapis.com/v1beta/models/" +
       CONFIG.MODEL +
@@ -2251,8 +2297,8 @@ a{ color:var(--accent-1); text-decoration:none; }
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          /* ✅ المفتاح في الترويسة — الطريقة الصحيحة لمفاتيح AQ. */
-          "x-goog-api-key": CONFIG.API_KEY
+          /* المفتاح في الترويسة */
+          "x-goog-api-key": apiKey
         },
         body: JSON.stringify(body)
       });
@@ -2311,16 +2357,10 @@ a{ color:var(--accent-1); text-decoration:none; }
 
     if (!rawText && !hasAttachments) return;
 
-    /* التحقق من وجود مفتاح API */
-    if (!CONFIG.API_KEY || CONFIG.API_KEY.indexOf("ضع_مفتاح") !== -1) {
-      if (els.welcome) els.welcome.style.display = "none";
-      renderBotMessage(
-        "⚠️ **مفتاح الـ API غير مُضاف بعد!**\n\n" +
-        "افتح الكود وابحث عن السطر:\n" +
-        "`API_KEY: \"ضع_مفتاحك_هنا\"`\n\n" +
-        "واستبدله بمفتاح Gemini API الخاص بك من Google AI Studio (Authorization Key). 🚀",
-        true
-      );
+    /* الحصول على مفتاح الجلسة بدون تخزينه داخل ملف HTML */
+    const apiKey = askForApiKey();
+    if (!apiKey) {
+      toast("🔑 لم يتم إدخال مفتاح الخدمة.");
       return;
     }
 
@@ -2383,7 +2423,7 @@ a{ color:var(--accent-1); text-decoration:none; }
     renderChatList();
 
     try {
-      const reply = await callGemini(session);
+      const reply = await callModel(session);
 
       removeTypingIndicator(typingId);
 
@@ -2403,22 +2443,28 @@ a{ color:var(--accent-1); text-decoration:none; }
 
       const msg = (error && error.message) ? error.message : "";
 
-      if (/API key not valid|API_KEY_INVALID|invalid.*key|invalid authentication credentials|UNAUTHENTICATED/i.test(msg)) {
-        friendly = "🔑 **مفتاح الـ API غير صالح.**\n\nاتأكد إنك نسخت المفتاح صح من Google AI Studio، وإنه مضبوط في السطر `API_KEY` في `CONFIG`.";
+      if (/^NO_API_KEY$/.test(msg)) {
+        friendly = "🔑 **مفتاح الخدمة مش موجود.**\n\nدخل مفتاح جديد وجرب تاني.";
+      } else if (/API key not valid|API_KEY_INVALID|invalid.*key|invalid authentication credentials|UNAUTHENTICATED|ACCESS_TOKEN_TYPE_UNSUPPORTED/i.test(msg)) {
+        friendly = "🔑 **مفتاح الخدمة غير صالح أو مش متوافق.**\n\nأنشئ مفتاحًا جديدًا من لوحة إعداد المفتاح، وتأكد أنه كامل ومن غير مسافات أو علامات اقتباس إضافية.";
+      } else if (/permission denied|PERMISSION_DENIED|403/i.test(msg)) {
+        friendly = "🚫 **المشروع أو مفتاح الاتصال مرفوض.**\n\nراجع حالة المفتاح والمشروع وصلاحيات الخدمة في لوحة إعداد المفتاح.";
       } else if (/quota|RESOURCE_EXHAUSTED|429/i.test(msg)) {
         friendly = "⏳ **وصلنا للحد الأقصى من الطلبات.**\n\nاستنى شوية وجرّب تاني.";
       } else if (/Failed to fetch|NetworkError|Load failed/i.test(msg)) {
         friendly = "📡 **في مشكلة في الاتصال بالإنترنت أو الخدمة محجوبة.**\n\nاتأكد من الشبكة، ولو بتفتح الملف من `file://` جرّب تشغّله عن طريق سيرفر محلي (Live Server) بدل الفتح المباشر.";
       } else if (/safety|blocked|حجب/i.test(msg)) {
         friendly = "🛡️ **الرد اتحجب بسبب سياسات السلامة.**\n\nجرّب تعيد صياغة سؤالك بشكل مختلف.";
+      } else if (/400|invalid argument|INVALID_ARGUMENT/i.test(msg)) {
+        friendly = "⚠️ **الخدمة رفضت بيانات الطلب.**\n\nراجع الرسالة أو المرفقات، ولو المشكلة مستمرة افتح Console وشوف نص الخطأ الأصلي.";
       } else if (/404|not found|NOT_FOUND|no longer available/i.test(msg)) {
-        friendly = "🔎 **النموذج غير متاح.**\n\nتأكد إن `CONFIG.MODEL` مضبوط على `gemini-3.8-flash` (النموذج الأحدث والمتاح حالياً).";
+        friendly = "🔎 **النموذج غير متاح من مشروعك.**\n\nالكود يستخدم `النموذج المطلوب غير متاح؛ راجع النماذج المتاحة من إعدادات المشروع.";
       } else if (msg) {
         friendly = "⚠️ **حصل خطأ:**\n\n`" + msg + "`";
       }
 
       renderBotMessage(friendly, true);
-      console.error("Gemini Error:", error);
+      console.error("API Error:", error);
     } finally {
       state.isGenerating = false;
       updateSendState();
@@ -2487,7 +2533,7 @@ a{ color:var(--accent-1); text-decoration:none; }
 
       const a = document.createElement("a");
       a.href = url;
-      a.download = "Hazouma-AI.html";
+      a.download = "Hazouma.html";
       document.body.appendChild(a);
       a.click();
       a.remove();
@@ -2549,7 +2595,7 @@ a{ color:var(--accent-1); text-decoration:none; }
       if (e.cancelable) e.preventDefault();
     }, { passive: false });
 
-    console.log("%c⚡ Hazouma AI جاهز للعمل!", "color:#8ab4f8;font-size:14px;font-weight:bold;");
+    console.log("%c⚡ Hazouma جاهز للعمل!", "color:#8ab4f8;font-size:14px;font-weight:bold;");
   }
 
   /* تشغيل التطبيق */
