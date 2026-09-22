@@ -1137,6 +1137,7 @@ a{ color:var(--accent-1); text-decoration:none; }
    نسخة معدّلة: تقوية شاملة لكل معالجات الأحداث + عزل كل وحدة تهيئة
    في try/catch مستقل حتى لو وحدة فشلت (زي المايك في متصفح ما بيدعمهوش
    أو بيئة بتمنع الميكروفون) باقي الأزرار تفضل شغالة عادي.
+   + تعديل رابط الاتصال بـ Gemini ليكون string مباشر بالشكل القياسي.
    ========================================================================== */
 (function () {
   "use strict";
@@ -1146,8 +1147,8 @@ a{ color:var(--accent-1); text-decoration:none; }
      ====================================================================== */
 
   const CONFIG = {
-    /* ✅ مفتاح Gemini API الشخصي — تم إضافته هنا */
-    API_KEY: "AQ.Ab8RN6INABrhftTaoS9E8jmvXjMAc6y-6jVJ4L-GA_VxsnEi-w",
+    /* ✅ ضع مفتاح Gemini API الشخصي هنا — لازم يبدأ بـ AIza */
+    API_KEY: "ضع_مفتاحك_هنا_يبدأ_بـ_AIza",
 
     /* اسم النموذج — يمكنك تغييره إلى gemini-2.5-pro مثلاً */
     MODEL: "gemini-2.5-flash",
@@ -2216,13 +2217,14 @@ a{ color:var(--accent-1); text-decoration:none; }
     return contents;
   }
 
-  /** استدعاء Gemini API */
+  /** استدعاء Gemini API — رابط مباشر بالشكل القياسي */
   async function callGemini(session) {
+    /* ✅ الرابط بالشكل المطلوب بالظبط — من غير أي encodeURIComponent معقّد */
     const url =
       "https://generativelanguage.googleapis.com/v1beta/models/" +
-      encodeURIComponent(CONFIG.MODEL) +
+      CONFIG.MODEL +
       ":generateContent?key=" +
-      encodeURIComponent(CONFIG.API_KEY);
+      CONFIG.API_KEY;
 
     const body = {
       systemInstruction: {
@@ -2306,13 +2308,13 @@ a{ color:var(--accent-1); text-decoration:none; }
     if (!rawText && !hasAttachments) return;
 
     /* التحقق من وجود مفتاح API */
-    if (!CONFIG.API_KEY || CONFIG.API_KEY.indexOf("ضع_مفتاح") !== -1) {
+    if (!CONFIG.API_KEY || CONFIG.API_KEY.indexOf("ضع_مفتاحك") !== -1) {
       if (els.welcome) els.welcome.style.display = "none";
       renderBotMessage(
         "⚠️ **مفتاح الـ API غير مُضاف بعد!**\n\n" +
         "افتح الكود وابحث عن السطر:\n" +
-        "`API_KEY: \"ضع_مفتاح_GEMINI_API_KEY_هنا\"`\n\n" +
-        "واستبدله بالمفتاح الحقيقي من Google AI Studio، وبعدين أعد تحميل الصفحة. 🚀",
+        "`API_KEY: \"ضع_مفتاحك_هنا_يبدأ_بـ_AIza\"`\n\n" +
+        "واستبدله بالمفتاح الحقيقي من Google AI Studio (بيبدأ بـ `AIza`)، وبعدين أعد تحميل الصفحة. 🚀",
         true
       );
       return;
@@ -2397,8 +2399,8 @@ a{ color:var(--accent-1); text-decoration:none; }
 
       const msg = (error && error.message) ? error.message : "";
 
-      if (/API key not valid|API_KEY_INVALID|invalid.*key/i.test(msg)) {
-        friendly = "🔑 **مفتاح الـ API غير صالح.**\n\nاتأكد إنك نسخت المفتاح صح من Google AI Studio، وإنه مفعّل لنموذج Gemini.";
+      if (/API key not valid|API_KEY_INVALID|invalid.*key|invalid authentication credentials/i.test(msg)) {
+        friendly = "🔑 **مفتاح الـ API غير صالح.**\n\nاتأكد إنك نسخت المفتاح صح من Google AI Studio، وإنه بيبدأ بـ `AIza`. كمان اتأكد إن Gemini API مفعّل على المشروع بتاع المفتاح.";
       } else if (/quota|RESOURCE_EXHAUSTED|429/i.test(msg)) {
         friendly = "⏳ **وصلنا للحد الأقصى من الطلبات.**\n\nاستنى شوية وجرّب تاني.";
       } else if (/Failed to fetch|NetworkError|Load failed/i.test(msg)) {
