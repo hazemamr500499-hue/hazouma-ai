@@ -8,16 +8,12 @@
 <meta name="author" content="Hazem">
 <title>Hazouma AI — مساعدك الشخصي الذكي</title>
 
-<!-- ===================== Favicon احترافي (SVG مدمج) ===================== -->
 <link rel="icon" type="image/svg+xml"
       href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0%25' stop-color='%234285f4'/%3E%3Cstop offset='55%25' stop-color='%239b72cb'/%3E%3Cstop offset='100%25' stop-color='%23d96570'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='16' fill='url(%23g)'/%3E%3Cpath d='M35 9 L17 36 h10 l-3 19 18-26 h-10 z' fill='%23ffffff'/%3E%3C/svg%3E">
 <link rel="apple-touch-icon"
       href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%234285f4'/%3E%3Cpath d='M35 9 L17 36 h10 l-3 19 18-26 h-10 z' fill='%23ffffff'/%3E%3C/svg%3E">
 
 <style>
-/* ==========================================================================
-   1) المتغيرات العامة (Design Tokens)
-   ========================================================================== */
 :root{
   --bg:#131314;
   --sidebar-bg:#1b1c1d;
@@ -50,9 +46,6 @@
   --mono:"Consolas","Monaco","SFMono-Regular","Courier New",monospace;
 }
 
-/* ==========================================================================
-   2) إعادة الضبط الأساسية
-   ========================================================================== */
 *,*::before,*::after{ box-sizing:border-box; margin:0; padding:0; }
 
 html{
@@ -89,7 +82,6 @@ a{ color:var(--accent-1); text-decoration:none; }
 
 ::selection{ background:rgba(66,133,244,.35); color:#fff; }
 
-/* شريط التمرير */
 ::-webkit-scrollbar{ width:9px; height:9px; }
 ::-webkit-scrollbar-track{ background:transparent; }
 ::-webkit-scrollbar-thumb{
@@ -100,9 +92,6 @@ a{ color:var(--accent-1); text-decoration:none; }
 }
 ::-webkit-scrollbar-thumb:hover{ background:#4d5155; background-clip:padding-box; }
 
-/* ==========================================================================
-   3) الهيكل العام للتطبيق
-   ========================================================================== */
 .app{
   display:flex;
   width:100%;
@@ -112,9 +101,6 @@ a{ color:var(--accent-1); text-decoration:none; }
   position:relative;
 }
 
-/* ==========================================================================
-   4) القائمة الجانبية (Sidebar)
-   ========================================================================== */
 .sidebar{
   background:var(--sidebar-bg);
   display:flex;
@@ -133,7 +119,6 @@ a{ color:var(--accent-1); text-decoration:none; }
   width:100%;
 }
 
-/* --- سطح المكتب: القائمة داخل التخطيط وقابلة للطي --- */
 @media (min-width:1024px){
   .sidebar{
     position:relative;
@@ -146,7 +131,6 @@ a{ color:var(--accent-1); text-decoration:none; }
   .sb-inner{ width:var(--sidebar-w); flex:0 0 var(--sidebar-w); }
 }
 
-/* --- الموبايل والتابلت: طبقة عائمة (Drawer) --- */
 @media (max-width:1023.98px){
   .sidebar{
     position:fixed;
@@ -202,7 +186,6 @@ a{ color:var(--accent-1); text-decoration:none; }
   box-shadow:0 2px 10px rgba(66,133,244,.35);
 }
 
-/* أزرار الأيقونات */
 .icon-btn{
   width:40px;
   height:40px;
@@ -217,7 +200,6 @@ a{ color:var(--accent-1); text-decoration:none; }
 .icon-btn:hover{ background:rgba(255,255,255,.08); color:var(--text); }
 .icon-btn:active{ transform:scale(.9); }
 
-/* زر محادثة جديدة */
 .new-chat-btn{
   display:flex;
   align-items:center;
@@ -294,7 +276,6 @@ a{ color:var(--accent-1); text-decoration:none; }
   text-align:center;
 }
 
-/* تذييل القائمة الجانبية + زر التنزيل */
 .sidebar-foot{
   flex:0 0 auto;
   padding-top:8px;
@@ -324,7 +305,6 @@ a{ color:var(--accent-1); text-decoration:none; }
 .download-btn:active{ transform:scale(.97); }
 .download-btn svg{ flex:0 0 auto; color:#8ab4f8; }
 
-/* الخلفية المعتمة للموبايل */
 .backdrop{
   display:none;
   position:fixed;
@@ -338,9 +318,6 @@ a{ color:var(--accent-1); text-decoration:none; }
 }
 .backdrop.show{ display:block; opacity:1; }
 
-/* ==========================================================================
-   5) المنطقة الرئيسية
-   ========================================================================== */
 .main{
   flex:1 1 auto;
   min-width:0;
@@ -351,7 +328,6 @@ a{ color:var(--accent-1); text-decoration:none; }
   overflow:hidden;
 }
 
-/* --- الشريط العلوي --- */
 .topbar{
   flex:0 0 auto;
   display:flex;
@@ -417,13 +393,11 @@ a{ color:var(--accent-1); text-decoration:none; }
   50%{ opacity:.55; transform:scale(.82); }
 }
 
-/* إخفاء تفاصيل إضافية على الشاشات الصغيرة جداً */
 @media (max-width:400px){
   .model-chip span:last-child{ display:none; }
   .model-chip{ padding:8px; }
 }
 
-/* --- منطقة التمرير الخاصة بالشات --- */
 .chat-scroll{
   flex:1 1 auto;
   min-height:0;
@@ -441,7 +415,6 @@ a{ color:var(--accent-1); text-decoration:none; }
   width:100%;
 }
 
-/* --- شاشة الترحيب --- */
 .welcome{
   display:flex;
   flex-direction:column;
@@ -499,9 +472,6 @@ a{ color:var(--accent-1); text-decoration:none; }
 .chip:active{ transform:scale(.98); }
 .chip .chip-ico{ display:block; font-size:17px; margin-bottom:7px; }
 
-/* ==========================================================================
-   6) الرسائل
-   ========================================================================== */
 .messages{ padding:12px 0 24px; }
 
 .msg{
@@ -572,7 +542,6 @@ a{ color:var(--accent-1); text-decoration:none; }
 }
 .msg-text strong{ color:#fff; font-weight:700; }
 
-/* الكود */
 .inline-code{
   background:#2b2d30;
   border:1px solid #3a3d41;
@@ -632,7 +601,6 @@ a{ color:var(--accent-1); text-decoration:none; }
   white-space:pre;
 }
 
-/* مؤشر الكتابة */
 .typing-msg .dots{
   display:flex;
   align-items:center;
@@ -653,7 +621,6 @@ a{ color:var(--accent-1); text-decoration:none; }
   30%{ transform:translateY(-7px); opacity:1; }
 }
 
-/* مؤشر الكتابة الفوري (المؤشر الوامض) */
 .caret{
   display:inline-block;
   width:8px;
@@ -666,9 +633,6 @@ a{ color:var(--accent-1); text-decoration:none; }
 }
 @keyframes blink{ 50%{ opacity:0; } }
 
-/* ==========================================================================
-   7) منطقة الإدخال (Composer)
-   ========================================================================== */
 .composer-wrap{
   flex:0 0 auto;
   padding:6px clamp(10px,2.5vw,20px) calc(10px + env(safe-area-inset-bottom, 0px));
@@ -677,7 +641,6 @@ a{ color:var(--accent-1); text-decoration:none; }
   z-index:30;
 }
 
-/* معاينة المرفقات */
 .attach-preview{
   display:none;
   max-width:var(--chat-max);
@@ -736,7 +699,6 @@ a{ color:var(--accent-1); text-decoration:none; }
 .thumb .remove:hover{ background:var(--danger); }
 .thumb .remove:active{ transform:scale(.88); }
 
-/* صندوق الكتابة */
 .composer{
   max-width:var(--chat-max);
   margin:0 auto;
@@ -773,7 +735,6 @@ a{ color:var(--accent-1); text-decoration:none; }
 }
 #input::placeholder{ color:var(--text-dim-2); }
 
-/* أزرار دائرية داخل صندوق الكتابة */
 .round-btn{
   width:40px;
   height:40px;
@@ -788,7 +749,6 @@ a{ color:var(--accent-1); text-decoration:none; }
 .round-btn:hover{ background:rgba(255,255,255,.09); color:var(--text); }
 .round-btn:active{ transform:scale(.9); }
 
-/* زر المايك في وضع الاستماع */
 #micBtn.listening{
   color:#fff;
   background:linear-gradient(135deg,var(--accent-1),var(--accent-2));
@@ -800,7 +760,6 @@ a{ color:var(--accent-1); text-decoration:none; }
   100%{ box-shadow:0 0 0 0 rgba(66,133,244,0); }
 }
 
-/* زر الإرسال */
 .send-btn{
   width:40px;
   height:40px;
@@ -822,7 +781,6 @@ a{ color:var(--accent-1); text-decoration:none; }
   box-shadow:none;
 }
 
-/* قائمة المرفقات المنبثقة */
 .attach-wrap{ position:relative; flex:0 0 auto; }
 
 .attach-menu{
@@ -864,7 +822,6 @@ a{ color:var(--accent-1); text-decoration:none; }
 .attach-item:hover{ background:rgba(255,255,255,.09); color:#fff; }
 .attach-item .ai-ico{ font-size:17px; flex:0 0 auto; }
 
-/* إخلاء المسؤولية */
 .disclaimer{
   max-width:var(--chat-max);
   margin:9px auto 0;
@@ -875,9 +832,6 @@ a{ color:var(--accent-1); text-decoration:none; }
   padding:0 8px;
 }
 
-/* ==========================================================================
-   8) التوست (Toast) للتنبيهات
-   ========================================================================== */
 .toast{
   position:fixed;
   bottom:calc(96px + env(safe-area-inset-bottom, 0px));
@@ -899,9 +853,6 @@ a{ color:var(--accent-1); text-decoration:none; }
 }
 .toast.show{ opacity:1; transform:translate(-50%, 0); }
 
-/* ==========================================================================
-   9) تحسينات إضافية للشاشات الصغيرة جداً والكبيرة جداً
-   ========================================================================== */
 @media (max-width:360px){
   .msg{ gap:9px; }
   .avatar{ width:28px; height:28px; flex:0 0 28px; }
@@ -921,7 +872,6 @@ a{ color:var(--accent-1); text-decoration:none; }
   body{ font-size:17px; }
 }
 
-/* تقليل الحركة لمن يفضل ذلك */
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{
     animation-duration:.01ms !important;
@@ -931,11 +881,43 @@ a{ color:var(--accent-1); text-decoration:none; }
   }
 }
 
-/* الطباعة */
 @media print{
   .sidebar,.composer-wrap,.topbar,.backdrop{ display:none !important; }
   body{ overflow:visible; background:#fff; color:#000; }
   .chat-scroll{ overflow:visible; }
+}
+
+/* شاشة خطأ إقلاع الطوارئ (تظهر فقط لو فشل init بالكامل) */
+.boot-error{
+  display:none;
+  position:fixed;
+  inset:0;
+  z-index:500;
+  background:rgba(10,10,11,.96);
+  color:#f2f2f2;
+  align-items:center;
+  justify-content:center;
+  padding:24px;
+  text-align:center;
+  font-family:var(--font);
+}
+.boot-error.show{ display:flex; }
+.boot-error .box{ max-width:420px; }
+.boot-error h2{ font-size:18px; margin-bottom:10px; color:#ff8a80; }
+.boot-error p{ font-size:13.5px; line-height:1.9; color:#c9c9c9; }
+.boot-error code{
+  display:block;
+  margin-top:10px;
+  direction:ltr;
+  text-align:left;
+  background:#000;
+  border:1px solid #333;
+  border-radius:8px;
+  padding:10px;
+  font-size:11.5px;
+  color:#ff9e93;
+  max-height:140px;
+  overflow:auto;
 }
 </style>
 </head>
@@ -1139,10 +1121,22 @@ a{ color:var(--accent-1); text-decoration:none; }
 <!-- ==================== التوست ==================== -->
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
+<!-- شاشة خطأ الإقلاع (تظهر فقط لو حصل عطل كامل غير متوقع) -->
+<div class="boot-error" id="bootError">
+  <div class="box">
+    <h2>⚠️ حصل عطل أثناء تشغيل الموقع</h2>
+    <p>حاول تعمل Refresh للصفحة. لو المشكلة استمرت، افتح Console (F12) وابعتلي رسالة الخطأ اللي ظاهرة تحت.</p>
+    <code id="bootErrorMsg"></code>
+  </div>
+</div>
+
 <script>
 /* ==========================================================================
    Hazouma AI — Single File Application
    المطوّر: حازم
+   نسخة معدّلة: تقوية شاملة لكل معالجات الأحداث + عزل كل وحدة تهيئة
+   في try/catch مستقل حتى لو وحدة فشلت (زي المايك في متصفح ما بيدعمهوش
+   أو بيئة بتمنع الميكروفون) باقي الأزرار تفضل شغالة عادي.
    ========================================================================== */
 (function () {
   "use strict";
@@ -1196,12 +1190,12 @@ a{ color:var(--accent-1); text-decoration:none; }
 
 قواعد الكود:
 - أي كود بتكتبه لازم يكون نظيف، منظّم، وبدون أخطاء، وبتشرحه بإيجاز.
-- حطّ الكود داخل بلوكات كود ``` بشكل صحيح.
+- حطّ الكود داخل بلوكات كود \`\`\` بشكل صحيح.
 - لما تستخدم أكواد طويلة، قسّمها لأجزاء واضحة مع تعليقات بالعربي.
 `.trim();
 
   /* ======================================================================
-     3) اختصار الوصول لعناصر الـ DOM
+     3) اختصار الوصول لعناصر الـ DOM (مع تحقق دفاعي)
      ====================================================================== */
 
   const $ = (id) => document.getElementById(id);
@@ -1234,8 +1228,28 @@ a{ color:var(--accent-1); text-decoration:none; }
     fileCamera:      $("fileCamera"),
     fileDoc:         $("fileDoc"),
 
-    toast:           $("toast")
+    toast:           $("toast"),
+    bootError:       $("bootError"),
+    bootErrorMsg:    $("bootErrorMsg")
   };
+
+  /** إرفاق مستمع حدث بأمان — لو العنصر مش موجود، يسجّل تحذير بدل ما يوقف كل الكود */
+  function on(el, evt, handler, opts) {
+    if (!el) {
+      console.warn("[Hazouma] عنصر مفقود، تعذّر ربط الحدث:", evt);
+      return;
+    }
+    el.addEventListener(evt, handler, opts);
+  }
+
+  /** تشغيل دالة تهيئة داخل try/catch مستقل، حتى لو فشلت وحدة تفضل باقي الوحدات شغالة */
+  function safeInit(name, fn) {
+    try {
+      fn();
+    } catch (err) {
+      console.error("[Hazouma] فشلت تهيئة الوحدة: " + name, err);
+    }
+  }
 
   /* ======================================================================
      4) حالة التطبيق
@@ -1255,42 +1269,38 @@ a{ color:var(--accent-1); text-decoration:none; }
      5) أدوات مساعدة عامة
      ====================================================================== */
 
-  /** توليد معرّف فريد */
   function uid() {
     return "id-" + Date.now().toString(36) + "-" + Math.random().toString(36).slice(2, 8);
   }
 
-  /** تهريب HTML لمنع أي حقن */
   function escapeHtml(text) {
     const map = { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;" };
     return String(text).replace(/[&<>"']/g, (m) => map[m]);
   }
 
-  /** عرض رسالة توست سريعة */
   let toastTimer = null;
   function toast(message, duration) {
-    if (!els.toast) return;
+    if (!els.toast) { console.log("[toast]", message); return; }
     els.toast.textContent = message;
     els.toast.classList.add("show");
     clearTimeout(toastTimer);
     toastTimer = setTimeout(() => els.toast.classList.remove("show"), duration || 2600);
   }
 
-  /** تنسيق حجم الملف */
   function formatSize(bytes) {
     if (bytes < 1024) return bytes + " B";
     if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + " KB";
     return (bytes / (1024 * 1024)).toFixed(1) + " MB";
   }
 
-  /** هل المستخدم قريب من نهاية الشات؟ */
   function isNearBottom() {
     const el = els.chatScroll;
+    if (!el) return true;
     return el.scrollHeight - el.scrollTop - el.clientHeight < 140;
   }
 
-  /** التمرير لأسفل */
   function scrollToBottom(force) {
+    if (!els.chatScroll) return;
     if (force || isNearBottom()) {
       els.chatScroll.scrollTop = els.chatScroll.scrollHeight;
     }
@@ -1300,7 +1310,6 @@ a{ color:var(--accent-1); text-decoration:none; }
      6) تنسيق النصوص (Markdown مصغّر)
      ====================================================================== */
 
-  /** تنسيق الأسطر العادية: كود سطري + غامق + أسطر جديدة */
   function formatInline(raw) {
     let h = escapeHtml(raw);
     h = h.replace(/`([^`\n]+)`/g, '<span class="inline-code">$1</span>');
@@ -1309,14 +1318,12 @@ a{ color:var(--accent-1); text-decoration:none; }
     return h;
   }
 
-  /** تنسيق النص الكامل مع بلوكات الكود */
   function formatMarkdown(text) {
     const parts = String(text).split("```");
     let out = "";
 
     for (let i = 0; i < parts.length; i++) {
       if (i % 2 === 1) {
-        /* بلوك كود */
         let code = parts[i];
         let lang = "";
 
@@ -1347,7 +1354,6 @@ a{ color:var(--accent-1); text-decoration:none; }
     return out;
   }
 
-  /** إغلاق أي بلوك كود مفتوح أثناء الكتابة التدريجية */
   function closeOpenFence(text) {
     const count = (text.match(/```/g) || []).length;
     return count % 2 === 1 ? text + "\n```" : text;
@@ -1362,22 +1368,19 @@ a{ color:var(--accent-1); text-decoration:none; }
   }
 
   function setSidebar(open, animate) {
+    if (!els.sidebar) return;
+
     if (isMobileLayout()) {
       els.sidebar.classList.toggle("open", open);
       els.sidebar.classList.remove("closed");
-      if (open) {
-        els.backdrop.classList.add("show");
-      } else {
-        els.backdrop.classList.remove("show");
-      }
+      if (els.backdrop) els.backdrop.classList.toggle("show", !!open);
     } else {
       els.sidebar.classList.toggle("closed", !open);
       els.sidebar.classList.remove("open");
-      els.backdrop.classList.remove("show");
+      if (els.backdrop) els.backdrop.classList.remove("show");
     }
 
     if (animate === false) {
-      /* إجبار إعادة الرسم بدون حركة */
       els.sidebar.style.transition = "none";
       void els.sidebar.offsetWidth;
       els.sidebar.style.transition = "";
@@ -1385,10 +1388,11 @@ a{ color:var(--accent-1); text-decoration:none; }
 
     try {
       localStorage.setItem("hazouma_sidebar_open", open ? "1" : "0");
-    } catch (e) { /* تجاهل */ }
+    } catch (e) { /* تجاهل بهدوء لو التخزين المحلي غير متاح */ }
   }
 
   function toggleSidebar() {
+    if (!els.sidebar) return;
     if (isMobileLayout()) {
       setSidebar(!els.sidebar.classList.contains("open"));
     } else {
@@ -1397,35 +1401,33 @@ a{ color:var(--accent-1); text-decoration:none; }
   }
 
   function initSidebar() {
-    /* استرجاع الحالة المحفوظة */
     let saved = null;
     try { saved = localStorage.getItem("hazouma_sidebar_open"); } catch (e) {}
 
     const openByDefault = saved !== null ? saved === "1" : !isMobileLayout();
     setSidebar(openByDefault, false);
 
-    els.menuBtn.addEventListener("click", toggleSidebar);
-    els.closeSidebarBtn.addEventListener("click", () => setSidebar(false));
-    els.backdrop.addEventListener("click", () => setSidebar(false));
+    on(els.menuBtn, "click", toggleSidebar);
+    on(els.closeSidebarBtn, "click", () => setSidebar(false));
+    on(els.backdrop, "click", () => setSidebar(false));
 
-    /* إغلاق بمفتاح Escape */
     document.addEventListener("keydown", (e) => {
       if (e.key === "Escape") {
-        if (els.attachMenu.classList.contains("show")) {
+        if (els.attachMenu && els.attachMenu.classList.contains("show")) {
           closeAttachMenu();
-        } else if (isMobileLayout() && els.sidebar.classList.contains("open")) {
+        } else if (isMobileLayout() && els.sidebar && els.sidebar.classList.contains("open")) {
           setSidebar(false);
         }
       }
     });
 
-    /* إعادة الضبط عند تغيير حجم الشاشة */
     let resizeTimer = null;
     window.addEventListener("resize", () => {
       clearTimeout(resizeTimer);
       resizeTimer = setTimeout(() => {
+        if (!els.sidebar) return;
         if (!isMobileLayout()) {
-          els.backdrop.classList.remove("show");
+          if (els.backdrop) els.backdrop.classList.remove("show");
           els.sidebar.classList.remove("open");
         } else {
           els.sidebar.classList.remove("closed");
@@ -1475,7 +1477,6 @@ a{ color:var(--accent-1); text-decoration:none; }
       localStorage.setItem(CONFIG.STORAGE_KEY, JSON.stringify(state.sessions));
       localStorage.setItem(CONFIG.CURRENT_KEY, state.currentId || "");
     } catch (e) {
-      /* قد تكون المساحة ممتلئة — نتجاهل بهدوء */
       console.warn("تعذّر حفظ المحادثات محلياً:", e);
     }
   }
@@ -1502,6 +1503,7 @@ a{ color:var(--accent-1); text-decoration:none; }
   }
 
   function renderChatList() {
+    if (!els.chatList) return;
     els.chatList.innerHTML = "";
 
     if (!state.sessions.length) {
@@ -1556,18 +1558,19 @@ a{ color:var(--accent-1); text-decoration:none; }
   }
 
   function loadSession(id) {
+    if (!els.messages) return;
     els.messages.innerHTML = "";
 
     const session = findSession(id);
 
     if (!session || !session.messages.length) {
-      els.welcome.style.display = "flex";
-      els.chatTitleTop.textContent = "مساعدك الذكي الشخصي";
+      if (els.welcome) els.welcome.style.display = "flex";
+      if (els.chatTitleTop) els.chatTitleTop.textContent = "مساعدك الذكي الشخصي";
       return;
     }
 
-    els.welcome.style.display = "none";
-    els.chatTitleTop.textContent = session.title || "محادثة";
+    if (els.welcome) els.welcome.style.display = "none";
+    if (els.chatTitleTop) els.chatTitleTop.textContent = session.title || "محادثة";
 
     session.messages.forEach((m) => {
       if (m.role === "user") {
@@ -1584,9 +1587,9 @@ a{ color:var(--accent-1); text-decoration:none; }
     /* لو المحادثة الحالية فاضية، مانعملش واحدة جديدة */
     const current = findSession(state.currentId);
     if (current && current.messages.length === 0) {
-      els.messages.innerHTML = "";
-      els.welcome.style.display = "flex";
-      els.chatTitleTop.textContent = "مساعدك الذكي الشخصي";
+      if (els.messages) els.messages.innerHTML = "";
+      if (els.welcome) els.welcome.style.display = "flex";
+      if (els.chatTitleTop) els.chatTitleTop.textContent = "مساعدك الذكي الشخصي";
       if (isMobileLayout()) setSidebar(false);
       return;
     }
@@ -1595,16 +1598,16 @@ a{ color:var(--accent-1); text-decoration:none; }
     saveState();
     renderChatList();
 
-    els.messages.innerHTML = "";
-    els.welcome.style.display = "flex";
-    els.chatTitleTop.textContent = "مساعدك الذكي الشخصي";
-    els.input.value = "";
+    if (els.messages) els.messages.innerHTML = "";
+    if (els.welcome) els.welcome.style.display = "flex";
+    if (els.chatTitleTop) els.chatTitleTop.textContent = "مساعدك الذكي الشخصي";
+    if (els.input) els.input.value = "";
     autoResize();
     updateSendState();
     clearAttachments();
 
     if (isMobileLayout()) setSidebar(false);
-    els.input.focus();
+    if (els.input) els.input.focus();
   }
 
   /* ======================================================================
@@ -1612,6 +1615,7 @@ a{ color:var(--accent-1); text-decoration:none; }
      ====================================================================== */
 
   function renderUserMessage(msg) {
+    if (!els.messages) return;
     const wrap = document.createElement("div");
     wrap.className = "msg user";
 
@@ -1658,7 +1662,7 @@ a{ color:var(--accent-1); text-decoration:none; }
     body.appendChild(text);
     wrap.appendChild(avatar);
     wrap.appendChild(body);
-    els.messages.appendChild(wrap);
+    if (els.messages) els.messages.appendChild(wrap);
 
     return text;
   }
@@ -1722,6 +1726,7 @@ a{ color:var(--accent-1); text-decoration:none; }
   /** مؤشر "جاري الكتابة..." */
   function showTypingIndicator() {
     const id = "typing-" + uid();
+    if (!els.messages) return id;
 
     const wrap = document.createElement("div");
     wrap.className = "msg bot typing-msg";
@@ -1748,16 +1753,19 @@ a{ color:var(--accent-1); text-decoration:none; }
      ====================================================================== */
 
   function openAttachMenu() {
+    if (!els.attachMenu) return;
     els.attachMenu.classList.add("show");
-    els.plusBtn.setAttribute("aria-expanded", "true");
+    if (els.plusBtn) els.plusBtn.setAttribute("aria-expanded", "true");
   }
 
   function closeAttachMenu() {
+    if (!els.attachMenu) return;
     els.attachMenu.classList.remove("show");
-    els.plusBtn.setAttribute("aria-expanded", "false");
+    if (els.plusBtn) els.plusBtn.setAttribute("aria-expanded", "false");
   }
 
   function toggleAttachMenu() {
+    if (!els.attachMenu) return;
     if (els.attachMenu.classList.contains("show")) closeAttachMenu();
     else openAttachMenu();
   }
@@ -1838,6 +1846,7 @@ a{ color:var(--accent-1); text-decoration:none; }
   }
 
   function renderAttachments() {
+    if (!els.attachPreview) return;
     els.attachPreview.innerHTML = "";
 
     if (!state.attachments.length) {
@@ -1896,47 +1905,47 @@ a{ color:var(--accent-1); text-decoration:none; }
   }
 
   function initAttachments() {
-    els.plusBtn.addEventListener("click", (e) => {
+    on(els.plusBtn, "click", (e) => {
       e.stopPropagation();
       toggleAttachMenu();
     });
 
-    els.attachMenu.addEventListener("click", (e) => {
+    on(els.attachMenu, "click", (e) => {
       const btn = e.target.closest(".attach-item");
       if (!btn) return;
 
       const action = btn.getAttribute("data-action");
       closeAttachMenu();
 
-      if (action === "image") els.fileImage.click();
-      else if (action === "camera") els.fileCamera.click();
-      else if (action === "file") els.fileDoc.click();
+      if (action === "image" && els.fileImage) els.fileImage.click();
+      else if (action === "camera" && els.fileCamera) els.fileCamera.click();
+      else if (action === "file" && els.fileDoc) els.fileDoc.click();
     });
 
     /* إغلاق القائمة عند الضغط خارجها */
     document.addEventListener("click", (e) => {
-      if (!els.attachMenu.classList.contains("show")) return;
-      if (els.attachMenu.contains(e.target) || els.plusBtn.contains(e.target)) return;
+      if (!els.attachMenu || !els.attachMenu.classList.contains("show")) return;
+      if (els.attachMenu.contains(e.target) || (els.plusBtn && els.plusBtn.contains(e.target))) return;
       closeAttachMenu();
     });
 
     /* تغيير الملفات */
-    els.fileImage.addEventListener("change", (e) => {
+    on(els.fileImage, "change", (e) => {
       addFiles(e.target.files);
       e.target.value = "";
     });
 
-    els.fileCamera.addEventListener("change", (e) => {
+    on(els.fileCamera, "change", (e) => {
       addFiles(e.target.files);
       e.target.value = "";
     });
 
-    els.fileDoc.addEventListener("change", (e) => {
+    on(els.fileDoc, "change", (e) => {
       addFiles(e.target.files);
       e.target.value = "";
     });
 
-    /* السحب والإفلات */
+    /* السحب والإفلات — نتجاهله فوق العناصر التفاعلية حتى لا نعطّل النقر */
     ["dragover", "drop"].forEach((evt) => {
       document.addEventListener(evt, (e) => e.preventDefault());
     });
@@ -1968,18 +1977,31 @@ a{ color:var(--accent-1); text-decoration:none; }
      ====================================================================== */
 
   function initSpeech() {
+    if (!els.micBtn) return;
+
     const SpeechRecognition =
       window.SpeechRecognition || window.webkitSpeechRecognition;
 
     if (!SpeechRecognition) {
-      els.micBtn.addEventListener("click", () => {
+      on(els.micBtn, "click", () => {
         toast("متصفحك لا يدعم الإدخال الصوتي. جرّب Google Chrome.");
       });
       return;
     }
 
-    const recognition = new SpeechRecognition();
-    recognition.lang = "ar-EG";
+    let recognition;
+    try {
+      recognition = new SpeechRecognition();
+    } catch (e) {
+      /* بعض المتصفحات/البيئات (مثل WebView مقيّد بسياسة أذونات) قد ترفض إنشاء الكائن */
+      on(els.micBtn, "click", () => {
+        toast("الإدخال الصوتي مش متاح في المتصفح ده حالياً.");
+      });
+      return;
+    }
+
+    /* اللغة العربية — السعودية أوسع دعماً من محرك التعرّف الصوتي في كروم */
+    recognition.lang = "ar-SA";
     recognition.continuous = false;
     recognition.interimResults = true;
     recognition.maxAlternatives = 1;
@@ -1990,8 +2012,10 @@ a{ color:var(--accent-1); text-decoration:none; }
     recognition.onstart = function () {
       state.isListening = true;
       els.micBtn.classList.add("listening");
-      els.input.placeholder = "🎙️ جاري الاستماع... اتكلم دلوقتي";
-      baseText = els.input.value ? els.input.value.trim() + " " : "";
+      if (els.input) {
+        els.input.placeholder = "🎙️ جاري الاستماع... اتكلم دلوقتي";
+        baseText = els.input.value ? els.input.value.trim() + " " : "";
+      }
       finalTranscript = "";
     };
 
@@ -2007,38 +2031,44 @@ a{ color:var(--accent-1); text-decoration:none; }
         }
       }
 
-      els.input.value = (baseText + finalTranscript + interim).trim();
-      autoResize();
-      updateSendState();
+      if (els.input) {
+        els.input.value = (baseText + finalTranscript + interim).trim();
+        autoResize();
+        updateSendState();
+      }
     };
 
     recognition.onerror = function (event) {
       state.isListening = false;
       els.micBtn.classList.remove("listening");
-      els.input.placeholder = "اسأل Hazouma AI أي حاجة...";
+      if (els.input) els.input.placeholder = "اسأل Hazouma AI أي حاجة...";
 
       const err = event.error;
       if (err === "not-allowed" || err === "service-not-allowed") {
         toast("لازم تسمح للموقع باستخدام المايك من إعدادات المتصفح.");
       } else if (err === "no-speech") {
-        toast("مس معايا أي صوت، جرّب تاني وقرب من المايك.");
+        toast("مسمعتش أي صوت، جرّب تاني وقرب من المايك.");
       } else if (err === "audio-capture") {
         toast("مش لاقي مايك متصل بالجهاز.");
       } else if (err === "network") {
         toast("في مشكلة في الشبكة أثناء الاستماع.");
+      } else if (err === "language-not-supported") {
+        toast("اللغة العربية مش مدعومة في متصفحك للتعرف الصوتي.");
       }
     };
 
     recognition.onend = function () {
       state.isListening = false;
       els.micBtn.classList.remove("listening");
-      els.input.placeholder = "اسأل Hazouma AI أي حاجة...";
-      els.input.focus();
+      if (els.input) {
+        els.input.placeholder = "اسأل Hazouma AI أي حاجة...";
+        if (!isMobileLayout()) els.input.focus();
+      }
     };
 
     state.recognition = recognition;
 
-    els.micBtn.addEventListener("click", function () {
+    on(els.micBtn, "click", function () {
       if (!state.recognition) return;
 
       if (state.isListening) {
@@ -2060,6 +2090,7 @@ a{ color:var(--accent-1); text-decoration:none; }
      ====================================================================== */
 
   function autoResize() {
+    if (!els.input) return;
     els.input.style.height = "auto";
     const max = 180;
     const next = Math.min(els.input.scrollHeight, max);
@@ -2068,45 +2099,44 @@ a{ color:var(--accent-1); text-decoration:none; }
   }
 
   function updateSendState() {
-    const hasText = els.input.value.trim().length > 0;
+    if (!els.sendBtn) return;
+    const hasText = !!(els.input && els.input.value.trim().length > 0);
     const hasFiles = state.attachments.length > 0;
     els.sendBtn.disabled = (!hasText && !hasFiles) || state.isGenerating;
   }
 
   function initComposer() {
-    els.input.addEventListener("input", () => {
+    on(els.input, "input", () => {
       autoResize();
       updateSendState();
     });
 
-    els.input.addEventListener("keydown", (e) => {
+    on(els.input, "keydown", (e) => {
       if (e.key === "Enter" && !e.shiftKey) {
         e.preventDefault();
         handleSend();
       }
     });
 
-    els.composer.addEventListener("submit", (e) => {
+    on(els.composer, "submit", (e) => {
       e.preventDefault();
       handleSend();
     });
 
     /* أزرار الاقتراحات */
-    if (els.chips) {
-      els.chips.addEventListener("click", (e) => {
-        const chip = e.target.closest(".chip");
-        if (!chip) return;
-        const prompt = chip.getAttribute("data-prompt");
-        if (!prompt) return;
-        els.input.value = prompt;
-        autoResize();
-        updateSendState();
-        handleSend();
-      });
-    }
+    on(els.chips, "click", (e) => {
+      const chip = e.target.closest(".chip");
+      if (!chip) return;
+      const prompt = chip.getAttribute("data-prompt");
+      if (!prompt || !els.input) return;
+      els.input.value = prompt;
+      autoResize();
+      updateSendState();
+      handleSend();
+    });
 
     /* نسخ الكود */
-    els.messages.addEventListener("click", (e) => {
+    on(els.messages, "click", (e) => {
       const btn = e.target.closest(".copy-code");
       if (!btn) return;
 
@@ -2213,11 +2243,17 @@ a{ color:var(--accent-1); text-decoration:none; }
       ]
     };
 
-    const response = await fetch(url, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(body)
-    });
+    let response;
+    try {
+      response = await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body)
+      });
+    } catch (networkErr) {
+      /* فشل fetch نفسه (لا إنترنت / CORS / تم حظر النطاق) */
+      throw new Error("Failed to fetch: " + (networkErr && networkErr.message ? networkErr.message : "network error"));
+    }
 
     let data = null;
     try {
@@ -2262,6 +2298,7 @@ a{ color:var(--accent-1); text-decoration:none; }
 
   async function handleSend() {
     if (state.isGenerating) return;
+    if (!els.input) return;
 
     const rawText = els.input.value.trim();
     const hasAttachments = state.attachments.length > 0;
@@ -2270,7 +2307,7 @@ a{ color:var(--accent-1); text-decoration:none; }
 
     /* التحقق من وجود مفتاح API */
     if (!CONFIG.API_KEY || CONFIG.API_KEY.indexOf("ضع_مفتاح") !== -1) {
-      els.welcome.style.display = "none";
+      if (els.welcome) els.welcome.style.display = "none";
       renderBotMessage(
         "⚠️ **مفتاح الـ API غير مُضاف بعد!**\n\n" +
         "افتح الكود وابحث عن السطر:\n" +
@@ -2320,7 +2357,7 @@ a{ color:var(--accent-1); text-decoration:none; }
     }
 
     /* عرض الرسالة */
-    els.welcome.style.display = "none";
+    if (els.welcome) els.welcome.style.display = "none";
     renderUserMessage(userMessage);
 
     /* تصفير خانة الإدخال */
@@ -2332,7 +2369,7 @@ a{ color:var(--accent-1); text-decoration:none; }
     state.isGenerating = true;
     updateSendState();
 
-    els.chatTitleTop.textContent = session.title;
+    if (els.chatTitleTop) els.chatTitleTop.textContent = session.title;
 
     const typingId = showTypingIndicator();
 
@@ -2361,13 +2398,15 @@ a{ color:var(--accent-1); text-decoration:none; }
       const msg = (error && error.message) ? error.message : "";
 
       if (/API key not valid|API_KEY_INVALID|invalid.*key/i.test(msg)) {
-        friendly = "🔑 **مفتاح الـ API غير صالح.**\n\nاتأكد إنك نسخت المفتاح صح من Google AI Studio.";
+        friendly = "🔑 **مفتاح الـ API غير صالح.**\n\nاتأكد إنك نسخت المفتاح صح من Google AI Studio، وإنه مفعّل لنموذج Gemini.";
       } else if (/quota|RESOURCE_EXHAUSTED|429/i.test(msg)) {
         friendly = "⏳ **وصلنا للحد الأقصى من الطلبات.**\n\nاستنى شوية وجرّب تاني.";
       } else if (/Failed to fetch|NetworkError|Load failed/i.test(msg)) {
-        friendly = "📡 **في مشكلة في الاتصال بالإنترنت.**\n\nاتأكد من الشبكة وجرّب تاني.";
+        friendly = "📡 **في مشكلة في الاتصال بالإنترنت أو الخدمة محجوبة.**\n\nاتأكد من الشبكة، ولو بتفتح الملف من `file://` جرّب تشغّله عن طريق سيرفر محلي (Live Server) بدل الفتح المباشر.";
       } else if (/safety|blocked|حجب/i.test(msg)) {
         friendly = "🛡️ **الرد اتحجب بسبب سياسات السلامة.**\n\nجرّب تعيد صياغة سؤالك بشكل مختلف.";
+      } else if (/404|not found|NOT_FOUND/i.test(msg)) {
+        friendly = "🔎 **اسم الموديل غير موجود.**\n\nتأكد إن `CONFIG.MODEL` بيشاور على موديل متاح فعلياً لمفتاحك (زي `gemini-2.5-flash`).";
       } else if (msg) {
         friendly = "⚠️ **حصل خطأ:**\n\n`" + msg + "`";
       }
@@ -2378,7 +2417,7 @@ a{ color:var(--accent-1); text-decoration:none; }
       state.isGenerating = false;
       updateSendState();
 
-      if (!isMobileLayout()) {
+      if (!isMobileLayout() && els.input) {
         els.input.focus();
       }
     }
@@ -2392,7 +2431,6 @@ a{ color:var(--accent-1); text-decoration:none; }
     try {
       const clone = document.documentElement.cloneNode(true);
 
-      /* تنظيف الحالة الديناميكية قبل التنزيل */
       const msgs = clone.querySelector("#messages");
       if (msgs) msgs.innerHTML = "";
 
@@ -2433,6 +2471,9 @@ a{ color:var(--accent-1); text-decoration:none; }
       const toastEl = clone.querySelector("#toast");
       if (toastEl) toastEl.classList.remove("show");
 
+      const bootErr = clone.querySelector("#bootError");
+      if (bootErr) bootErr.classList.remove("show");
+
       const html = "<!DOCTYPE html>\n" + clone.outerHTML;
 
       const blob = new Blob([html], { type: "text/html;charset=utf-8" });
@@ -2458,46 +2499,47 @@ a{ color:var(--accent-1); text-decoration:none; }
      16) التهيئة النهائية
      ====================================================================== */
 
+  function showBootError(err) {
+    if (els.bootError) {
+      els.bootError.classList.add("show");
+      if (els.bootErrorMsg) {
+        els.bootErrorMsg.textContent = (err && err.message) ? err.message : String(err);
+      }
+    }
+    console.error("[Hazouma] عطل كامل في الإقلاع:", err);
+  }
+
   function init() {
-    /* استرجاع المحادثات */
-    loadState();
+    /* كل وحدة معزولة في try/catch مستقل — فشل وحدة واحدة (زي initSpeech
+       في بيئة بتمنع المايك) لن يوقف باقي الوحدات (زي إرسال الرسائل
+       والقائمة الجانبية) عن العمل. هذا هو الإصلاح الأساسي لمشكلة
+       "الأزرار مش بترد" لما يحصل خطأ غير متوقع في وحدة واحدة فقط. */
 
-    /* القائمة الجانبية */
-    initSidebar();
+    safeInit("loadState", loadState);
+    safeInit("initSidebar", initSidebar);
+    safeInit("initAttachments", initAttachments);
+    safeInit("initSpeech", initSpeech);
+    safeInit("initComposer", initComposer);
 
-    /* المرفقات */
-    initAttachments();
+    safeInit("downloadBtn", () => on(els.downloadBtn, "click", downloadSite));
+    safeInit("newChatBtn", () => on(els.newChatBtn, "click", startNewChat));
 
-    /* الإدخال الصوتي */
-    initSpeech();
+    safeInit("renderChatList", renderChatList);
+    safeInit("loadSession", () => loadSession(state.currentId));
 
-    /* صندوق الكتابة */
-    initComposer();
+    safeInit("autoResize", autoResize);
+    safeInit("updateSendState", updateSendState);
 
-    /* زر التنزيل */
-    els.downloadBtn.addEventListener("click", downloadSite);
-
-    /* زر محادثة جديدة */
-    els.newChatBtn.addEventListener("click", startNewChat);
-
-    /* عرض القائمة */
-    renderChatList();
-
-    /* تحميل المحادثة الحالية */
-    loadSession(state.currentId);
-
-    /* ضبط ارتفاع خانة الكتابة */
-    autoResize();
-    updateSendState();
-
-    /* تركيز تلقائي على سطح المكتب */
-    if (!isMobileLayout()) {
+    if (!isMobileLayout() && els.input) {
       setTimeout(() => els.input.focus(), 260);
     }
 
-    /* منع اختفاء الصفحة عند السحب */
+    /* منع الارتداد (bounce) في السحب فوق الخلفية فقط — أبداً فوق
+       الأزرار أو الروابط أو حقول الإدخال، حتى لا نعطّل النقر عليها
+       في متصفحات الموبايل التي تُلغي حدث click لو تم استدعاء
+       preventDefault على touchmove فوق نفس العنصر. */
     document.addEventListener("touchmove", (e) => {
-      if (e.target.closest(".chat-scroll, .chat-list, .attach-preview, #input")) return;
+      if (e.target.closest(".chat-scroll, .chat-list, .attach-preview, #input, button, a, textarea, input")) return;
       if (e.cancelable) e.preventDefault();
     }, { passive: false });
 
@@ -2505,11 +2547,21 @@ a{ color:var(--accent-1); text-decoration:none; }
   }
 
   /* تشغيل التطبيق */
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", init);
-  } else {
-    init();
+  try {
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", init);
+    } else {
+      init();
+    }
+  } catch (err) {
+    showBootError(err);
   }
+
+  /* شبكة أمان إضافية: أي خطأ غير متوقع يهرب لاحقاً من أي معالج حدث
+     يُسجَّل في الكونسول بدل ما يختفي بصمت */
+  window.addEventListener("error", (e) => {
+    console.error("[Hazouma] خطأ غير متوقع:", e.error || e.message);
+  });
 
 })();
 </script>
