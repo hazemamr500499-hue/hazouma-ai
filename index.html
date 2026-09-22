@@ -1134,10 +1134,7 @@ a{ color:var(--accent-1); text-decoration:none; }
 /* ==========================================================================
    Hazouma AI — Single File Application
    المطوّر: حازم
-   نسخة معدّلة: تقوية شاملة لكل معالجات الأحداث + عزل كل وحدة تهيئة
-   في try/catch مستقل حتى لو وحدة فشلت (زي المايك في متصفح ما بيدعمهوش
-   أو بيئة بتمنع الميكروفون) باقي الأزرار تفضل شغالة عادي.
-   + تعديل رابط الاتصال بـ Gemini ليكون string مباشر بالشكل القياسي.
+   نسخة معدّلة: إصلاح مشكلة Gemini API والمصادقة (طريقة إرسال المفتاح + اسم النموذج).
    ========================================================================== */
 (function () {
   "use strict";
@@ -1147,11 +1144,12 @@ a{ color:var(--accent-1); text-decoration:none; }
      ====================================================================== */
 
   const CONFIG = {
-    /* ✅ ضع مفتاح Gemini API الشخصي هنا — لازم يبدأ بـ AIza */
-    API_KEY: "ضع_مفتاحك_هنا_يبدأ_بـ_AIza",
+    /* ✅ ضع مفتاح Gemini API (Authorization Key) هنا — يبدأ بـ AQ. */
+    /* مثال: API_KEY: "AQ.Ab8RN6..." */
+    API_KEY: "ضع_مفتاحك_هنا",
 
-    /* اسم النموذج — يمكنك تغييره إلى gemini-2.5-pro مثلاً */
-    MODEL: "gemini-2.5-flash",
+    /* ✅ النموذج الحالي: gemini-3.8-flash (النموذج 2.5 متوقف) */
+    MODEL: "gemini-3.8-flash",
 
     /* الحد الأقصى لحجم الملف الواحد بالميجابايت */
     MAX_FILE_MB: 8,
@@ -1234,7 +1232,7 @@ a{ color:var(--accent-1); text-decoration:none; }
     bootErrorMsg:    $("bootErrorMsg")
   };
 
-  /** إرفاق مستمع حدث بأمان — لو العنصر مش موجود، يسجّل تحذير بدل ما يوقف كل الكود */
+  /** إرفاق مستمع حدث بأمان */
   function on(el, evt, handler, opts) {
     if (!el) {
       console.warn("[Hazouma] عنصر مفقود، تعذّر ربط الحدث:", evt);
@@ -1243,7 +1241,7 @@ a{ color:var(--accent-1); text-decoration:none; }
     el.addEventListener(evt, handler, opts);
   }
 
-  /** تشغيل دالة تهيئة داخل try/catch مستقل، حتى لو فشلت وحدة تفضل باقي الوحدات شغالة */
+  /** تشغيل دالة تهيئة داخل try/catch مستقل */
   function safeInit(name, fn) {
     try {
       fn();
@@ -1257,12 +1255,12 @@ a{ color:var(--accent-1); text-decoration:none; }
      ====================================================================== */
 
   const state = {
-    sessions: [],        // كل المحادثات
-    currentId: null,     // معرف المحادثة الحالية
-    attachments: [],     // المرفقات الحالية قبل الإرسال
-    isGenerating: false, // هل النموذج يكتب الآن؟
-    cancelTyping: null,  // لإلغاء تأثير الكتابة
-    recognition: null,   // كائن التعرف على الصوت
+    sessions: [],
+    currentId: null,
+    attachments: [],
+    isGenerating: false,
+    cancelTyping: null,
+    recognition: null,
     isListening: false
   };
 
@@ -1389,7 +1387,7 @@ a{ color:var(--accent-1); text-decoration:none; }
 
     try {
       localStorage.setItem("hazouma_sidebar_open", open ? "1" : "0");
-    } catch (e) { /* تجاهل بهدوء لو التخزين المحلي غير متاح */ }
+    } catch (e) { /* تجاهل بهدوء */ }
   }
 
   function toggleSidebar() {
@@ -1446,7 +1444,7 @@ a{ color:var(--accent-1); text-decoration:none; }
       id: uid(),
       title: "محادثة جديدة",
       createdAt: Date.now(),
-      messages: []   // { role: 'user' | 'model', text: string, images: [{dataUrl, mime}] }
+      messages: []
     };
     state.sessions.unshift(session);
     state.currentId = session.id;
@@ -2217,14 +2215,16 @@ a{ color:var(--accent-1); text-decoration:none; }
     return contents;
   }
 
-  /** استدعاء Gemini API — رابط مباشر بالشكل القياسي */
+  /** استدعاء Gemini API — إصلاح المشكلة:
+   *  1. المفتاح يُرسَل عبر ترويسة x-goog-api-key بدل ?key= في الرابط
+   *  2. النموذج هو gemini-3.8-flash (النموذج 2.5 متوقف)
+   */
   async function callGemini(session) {
-    /* ✅ الرابط بالشكل المطلوب بالظبط — من غير أي encodeURIComponent معقّد */
+    /* ✅ الرابط بدون ?key= — المفتاح في الترويسة */
     const url =
       "https://generativelanguage.googleapis.com/v1beta/models/" +
       CONFIG.MODEL +
-      ":generateContent?key=" +
-      CONFIG.API_KEY;
+      ":generateContent";
 
     const body = {
       systemInstruction: {
@@ -2249,7 +2249,11 @@ a{ color:var(--accent-1); text-decoration:none; }
     try {
       response = await fetch(url, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          /* ✅ المفتاح في الترويسة — الطريقة الصحيحة لمفاتيح AQ. */
+          "x-goog-api-key": CONFIG.API_KEY
+        },
         body: JSON.stringify(body)
       });
     } catch (networkErr) {
@@ -2308,13 +2312,13 @@ a{ color:var(--accent-1); text-decoration:none; }
     if (!rawText && !hasAttachments) return;
 
     /* التحقق من وجود مفتاح API */
-    if (!CONFIG.API_KEY || CONFIG.API_KEY.indexOf("ضع_مفتاحك") !== -1) {
+    if (!CONFIG.API_KEY || CONFIG.API_KEY.indexOf("ضع_مفتاح") !== -1) {
       if (els.welcome) els.welcome.style.display = "none";
       renderBotMessage(
         "⚠️ **مفتاح الـ API غير مُضاف بعد!**\n\n" +
         "افتح الكود وابحث عن السطر:\n" +
-        "`API_KEY: \"ضع_مفتاحك_هنا_يبدأ_بـ_AIza\"`\n\n" +
-        "واستبدله بالمفتاح الحقيقي من Google AI Studio (بيبدأ بـ `AIza`)، وبعدين أعد تحميل الصفحة. 🚀",
+        "`API_KEY: \"ضع_مفتاحك_هنا\"`\n\n" +
+        "واستبدله بمفتاح Gemini API الخاص بك من Google AI Studio (Authorization Key). 🚀",
         true
       );
       return;
@@ -2399,16 +2403,16 @@ a{ color:var(--accent-1); text-decoration:none; }
 
       const msg = (error && error.message) ? error.message : "";
 
-      if (/API key not valid|API_KEY_INVALID|invalid.*key|invalid authentication credentials/i.test(msg)) {
-        friendly = "🔑 **مفتاح الـ API غير صالح.**\n\nاتأكد إنك نسخت المفتاح صح من Google AI Studio، وإنه بيبدأ بـ `AIza`. كمان اتأكد إن Gemini API مفعّل على المشروع بتاع المفتاح.";
+      if (/API key not valid|API_KEY_INVALID|invalid.*key|invalid authentication credentials|UNAUTHENTICATED/i.test(msg)) {
+        friendly = "🔑 **مفتاح الـ API غير صالح.**\n\nاتأكد إنك نسخت المفتاح صح من Google AI Studio، وإنه مضبوط في السطر `API_KEY` في `CONFIG`.";
       } else if (/quota|RESOURCE_EXHAUSTED|429/i.test(msg)) {
         friendly = "⏳ **وصلنا للحد الأقصى من الطلبات.**\n\nاستنى شوية وجرّب تاني.";
       } else if (/Failed to fetch|NetworkError|Load failed/i.test(msg)) {
         friendly = "📡 **في مشكلة في الاتصال بالإنترنت أو الخدمة محجوبة.**\n\nاتأكد من الشبكة، ولو بتفتح الملف من `file://` جرّب تشغّله عن طريق سيرفر محلي (Live Server) بدل الفتح المباشر.";
       } else if (/safety|blocked|حجب/i.test(msg)) {
         friendly = "🛡️ **الرد اتحجب بسبب سياسات السلامة.**\n\nجرّب تعيد صياغة سؤالك بشكل مختلف.";
-      } else if (/404|not found|NOT_FOUND/i.test(msg)) {
-        friendly = "🔎 **اسم الموديل غير موجود.**\n\nتأكد إن `CONFIG.MODEL` بيشاور على موديل متاح فعلياً لمفتاحك (زي `gemini-2.5-flash`).";
+      } else if (/404|not found|NOT_FOUND|no longer available/i.test(msg)) {
+        friendly = "🔎 **النموذج غير متاح.**\n\nتأكد إن `CONFIG.MODEL` مضبوط على `gemini-3.8-flash` (النموذج الأحدث والمتاح حالياً).";
       } else if (msg) {
         friendly = "⚠️ **حصل خطأ:**\n\n`" + msg + "`";
       }
