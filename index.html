@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=5.0">
 <meta name="theme-color" content="#131314">
-<meta name="description" content="Hazouma AI — مساعدك الشخصي الذكي، من تصميم وتطوير حازم.">
+<meta name="description" content="Hazouma AI — مساعدك الشخصي الذكي، مدعوم بـ Grok من xAI.">
 <meta name="author" content="Hazem">
 <title>Hazouma AI — مساعدك الشخصي الذكي</title>
 
@@ -786,149 +786,139 @@ a{ color:var(--accent-1); text-decoration:none; }
 .attach-menu{
   display:none;
   position:absolute;
-  bottom:calc(100% + 12px);
-  inset-inline-end:0;
+  bottom:calc(100% + 14px);
+  inset-inline-start: 0; /* تم التعديل: تفتح ناحية الشمال */
   flex-direction:column;
-  gap:2px;
-  min-width:210px;
-  padding:6px;
-  background:var(--surface-2);
-  border:1px solid var(--border-2);
-  border-radius:16px;
-  box-shadow:0 16px 44px rgba(0,0,0,.6);
-  z-index:60;
-}
-.attach-menu.show{
-  display:flex;
-  animation:popIn .18s var(--spring);
-}
-@keyframes popIn{
-  from{ opacity:0; transform:translateY(10px) scale(.95); }
-  to{ opacity:1; transform:none; }
-}
-
-.attach-item{
-  display:flex;
-  align-items:center;
-  gap:11px;
-  padding:11px 13px;
-  border-radius:11px;
-  font-size:14px;
-  color:var(--text-soft);
-  white-space:nowrap;
-  text-align:start;
-  transition:background .15s var(--ease), color .15s var(--ease);
-}
-.attach-item:hover{ background:rgba(255,255,255,.09); color:#fff; }
-.attach-item .attach-ico{ font-size:17px; flex:0 0 auto; }
-
-.disclaimer{
-  max-width:var(--chat-max);
-  margin:9px auto 0;
-  text-align:center;
-  font-size:11.5px;
-  line-height:1.7;
-  color:var(--text-dim-2);
-  padding:0 8px;
+  gap:4px;
+  min-width:240px;
+  padding:8px;
+  background: rgba(30, 31, 32, 0.92);
+  backdrop-filter: blur(24px) saturate(1.6);
+  -webkit-backdrop-filter: blur(24px) saturate(1.6);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+  box-shadow:
+    0 24px 64px rgba(0, 0, 0, 0.75),
+    0 0 0 1px rgba(255, 255, 255, 0.04),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
+  z-index: 60;
+  overflow: hidden;
+  transform-origin: bottom right;
+  transition:
+    opacity 0.22s cubic-bezier(0.4, 0, 0.2, 1),
+    transform 0.22s cubic-bezier(0.34, 1.3, 0.64, 1),
+    visibility 0.22s;
+  opacity: 0;
+  transform: translateY(12px) scale(0.92);
+  visibility: hidden;
+  pointer-events: none;
 }
 
-.copyright{
-  max-width:var(--chat-max);
-  margin:5px auto 0;
-  padding:0 8px;
-  text-align:center;
-  font-size:10.5px;
-  line-height:1.7;
-  color:var(--text-dim-2);
-  opacity:.9;
+.attach-menu.show {
+  display: flex;
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  visibility: visible;
+  pointer-events: auto;
+  animation: menuSlideIn 0.28s cubic-bezier(0.34, 1.3, 0.64, 1) forwards;
 }
 
-.toast{
-  position:fixed;
-  bottom:calc(96px + env(safe-area-inset-bottom, 0px));
-  left:50%;
-  transform:translate(-50%, 20px);
-  background:var(--surface-3);
-  color:#fff;
-  font-size:13.5px;
-  padding:11px 20px;
-  border-radius:999px;
-  border:1px solid var(--border-2);
-  box-shadow:0 10px 34px rgba(0,0,0,.5);
-  opacity:0;
-  pointer-events:none;
-  transition:opacity .28s var(--ease), transform .28s var(--ease);
-  z-index:200;
-  max-width:88vw;
-  text-align:center;
-}
-.toast.show{ opacity:1; transform:translate(-50%, 0); }
-
-@media (max-width:360px){
-  .msg{ gap:9px; }
-  .avatar{ width:28px; height:28px; flex:0 0 28px; }
-  .msg.user .user-bubble{ max-width:88%; font-size:14.5px; padding:10px 14px; }
-  .msg-text{ font-size:14.5px; }
-  .round-btn,.send-btn{ width:36px; height:36px; flex:0 0 36px; }
-  .composer{ padding:5px; gap:3px; }
-  #input{ font-size:15px; }
-}
-
-@media (min-width:1600px){
-  :root{ --chat-max:900px; }
-}
-
-@media (min-width:2200px){
-  :root{ --chat-max:980px; --sidebar-w:320px; }
-  body{ font-size:17px; }
-}
-
-@media (prefers-reduced-motion:reduce){
-  *,*::before,*::after{
-    animation-duration:.01ms !important;
-    animation-iteration-count:1 !important;
-    transition-duration:.01ms !important;
-    scroll-behavior:auto !important;
+@keyframes menuSlideIn {
+  0% {
+    opacity: 0;
+    transform: translateY(16px) scale(0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
   }
 }
 
-@media print{
-  .sidebar,.composer-wrap,.topbar,.backdrop{ display:none !important; }
-  body{ overflow:visible; background:#fff; color:#000; }
-  .chat-scroll{ overflow:visible; }
+.attach-item {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 13px 16px;
+  border-radius: 14px;
+  font-size: 14px;
+  color: #d5d7da;
+  white-space: nowrap;
+  text-align: start;
+  transition:
+    background 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+    color 0.2s cubic-bezier(0.4, 0, 0.2, 1),
+    transform 0.15s cubic-bezier(0.4, 0, 0.2, 1),
+    padding 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  border: 1px solid transparent;
+  background: transparent;
+  width: 100%;
 }
 
-/* شاشة خطأ إقلاع الطوارئ (تظهر فقط لو فشل init بالكامل) */
-.boot-error{
-  display:none;
-  position:fixed;
-  inset:0;
-  z-index:500;
-  background:rgba(10,10,11,.96);
-  color:#f2f2f2;
-  align-items:center;
-  justify-content:center;
-  padding:24px;
-  text-align:center;
-  font-family:var(--font);
+.attach-item:hover {
+  background: linear-gradient(135deg,
+    rgba(66, 133, 244, 0.16),
+    rgba(155, 114, 203, 0.16));
+  color: #ffffff;
+  border-color: rgba(138, 180, 248, 0.2);
+  transform: translateX(-3px);
+  padding-inline-start: 19px;
 }
-.boot-error.show{ display:flex; }
-.boot-error .box{ max-width:420px; }
-.boot-error h2{ font-size:18px; margin-bottom:10px; color:#ff8a80; }
-.boot-error p{ font-size:13.5px; line-height:1.9; color:#c9c9c9; }
-.boot-error code{
-  display:block;
-  margin-top:10px;
-  direction:ltr;
-  text-align:left;
-  background:#000;
-  border:1px solid #333;
-  border-radius:8px;
-  padding:10px;
-  font-size:11.5px;
-  color:#ff9e93;
-  max-height:140px;
-  overflow:auto;
+
+.attach-item:active {
+  transform: translateX(-3px) scale(0.97);
+}
+
+.attach-item .attach-ico {
+  font-size: 19px;
+  flex: 0 0 auto;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 9px;
+  transition:
+    background 0.2s,
+    transform 0.2s,
+    box-shadow 0.2s;
+  border: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.attach-item:hover .attach-ico {
+  background: linear-gradient(135deg,
+    rgba(66, 133, 244, 0.3),
+    rgba(155, 114, 203, 0.3));
+  transform: scale(1.08);
+  box-shadow: 0 0 16px rgba(66, 133, 244, 0.25);
+}
+
+/* فاصل خفيف بين المجموعات */
+.attach-divider {
+  height: 1px;
+  background: linear-gradient(90deg,
+    transparent,
+    rgba(255, 255, 255, 0.07) 20%,
+    rgba(255, 255, 255, 0.07) 80%,
+    transparent);
+  margin: 4px 8px;
+  flex: 0 0 auto;
+}
+
+/* تلميح خفيف أسفل القائمة */
+.attach-menu::after {
+  content: "";
+  position: absolute;
+  bottom: -6px;
+  inset-inline-start: 24px; /* تم التعديل: السهم يتحرك مع القائمة */
+  width: 12px;
+  height: 12px;
+  background: rgba(30, 31, 32, 0.92);
+  border-right: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  transform: rotate(45deg);
+  border-radius: 0 0 3px 0;
 }
 </style>
 </head>
@@ -1007,7 +997,8 @@ a{ color:var(--accent-1); text-decoration:none; }
 
       <div class="topbar-spacer"></div>
 
-      <div class="model-chip" title="حزمة Hazouma AI 1.1">
+      <!-- ✅ تم التعديل هنا: تغيير الاسم إلى Hazouma AI 1.1 -->
+      <div class="model-chip" title="Hazouma AI 1.1">
         <span class="live-dot"></span>
         <span>Hazouma AI 1.1</span>
       </div>
@@ -1098,6 +1089,11 @@ a{ color:var(--accent-1); text-decoration:none; }
               <span class="attach-ico">📄</span>
               <span>ملف / مستند</span>
             </button>
+            <div class="attach-divider"></div>
+            <button class="attach-item" type="button" data-action="media" role="menuitem">
+              <span class="attach-ico">🎬</span>
+              <span>وسائط (صوت / فيديو)</span>
+            </button>
           </div>
         </div>
 
@@ -1139,6 +1135,7 @@ a{ color:var(--accent-1); text-decoration:none; }
 <input type="file" id="fileImage"  accept="image/*" hidden>
 <input type="file" id="fileCamera" accept="image/*" capture="environment" hidden>
 <input type="file" id="fileDoc"    hidden multiple>
+<input type="file" id="fileMedia"  accept="audio/*,video/*" hidden multiple>
 
 <!-- ==================== التوست ==================== -->
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
@@ -1156,27 +1153,26 @@ a{ color:var(--accent-1); text-decoration:none; }
 /* ==========================================================================
    Hazouma AI — Single File Application
    المطوّر: حازم
-   نسخة مُصلَّحة: إصلاح جذري لمشكلة مصادقة مفاتيح Gemini الحديثة (AQ.)
+   نسخة مُحدَّثة: مدعومة بـ Grok API من xAI (نموذج grok-4.7)
    ========================================================================== */
 (function () {
   "use strict";
 
   /* ======================================================================
-     🔑 ضع مفتاحك هنا مباشرة
-
+     🔑 إعداد مفتاح xAI API
+     
      ⚠️ تحذير أمان مهم جداً:
      - الملف ده هيتحط على الإنترنت (GitHub / Vercel)، وأي حد يقدر يفتح
        "Page Source" أو DevTools ويشوف المفتاح ويستخدمه على حسابك.
      - متحطش مفتاحك الحقيقي جوه ملف عام (Public Repo) أبداً.
      - لو سبق وحطيت مفتاح حقيقي في أي مكان (حتى في شات أو مستند)، اعتبره
-       "مكشوف" وامسحه (Delete) من https://aistudio.google.com/apikey
-       واعمل مفتاح جديد بدل منه فوراً.
-     - الحل الآمن الحقيقي (لو حبيت تتطور لاحقاً): تعمل سيرفر بسيط (Proxy)
-       يخبي المفتاح، والمتصفح يكلم السيرفر مش Gemini مباشرة. بس للمشروع
-       الشخصي/التعليمي ده، سيبناه بالطريقة البسيطة زي ما طلبت.
+       "مكشوف" وامسحه واعمل مفتاح جديد بدل منه فوراً.
+     - الحل الآمن الحقيقي: تعمل سيرفر بسيط (Proxy) يخبي المفتاح، والمتصفح
+       يكلم السيرفر مش xAI مباشرة. بس للمشروع الشخصي/التعليمي ده، سيبناه
+       بالطريقة البسيطة زي ما طلبت.
      ====================================================================== */
 
-  const API_KEY = "ضع_مفتاحك_هنا";
+  const API_KEY = "ضع_مفتاح_xAI_هنا"; // ← ضع مفتاح xAI API الخاص بك هنا
 
   /* ======================================================================
      1) الإعدادات العامة
@@ -1186,8 +1182,11 @@ a{ color:var(--accent-1); text-decoration:none; }
     /* المفتاح مأخوذ من الثابت بالأعلى (يمكن تجاوزه من sessionStorage) */
     API_KEY: API_KEY,
 
-    /* النموذج الحالي المدعوم */
-    MODEL: "gemini-2.5-flash",
+    /* نقطة النهاية لـ xAI Chat Completions (متوافقة مع OpenAI) */
+    API_URL: "https://api.x.ai/v1/chat/completions",
+
+    /* النموذج الحالي المدعوم — Grok 4.7 هو الأحدث والأقوى */
+    MODEL: "grok-4.7",
 
     /* الحد الأقصى لحجم الملف الواحد بالميجابايت */
     MAX_FILE_MB: 8,
@@ -1264,6 +1263,7 @@ a{ color:var(--accent-1); text-decoration:none; }
     fileImage:       $("fileImage"),
     fileCamera:      $("fileCamera"),
     fileDoc:         $("fileDoc"),
+    fileMedia:       $("fileMedia"),
 
     toast:           $("toast"),
     bootError:       $("bootError"),
@@ -1786,7 +1786,7 @@ a{ color:var(--accent-1); text-decoration:none; }
   }
 
   /* ======================================================================
-     10) المرفقات (صور / ملفات / كاميرا)
+     10) المرفقات (صور / ملفات / كاميرا / وسائط)
      ====================================================================== */
 
   function openAttachMenu() {
@@ -1957,6 +1957,7 @@ a{ color:var(--accent-1); text-decoration:none; }
       if (action === "image" && els.fileImage) els.fileImage.click();
       else if (action === "camera" && els.fileCamera) els.fileCamera.click();
       else if (action === "file" && els.fileDoc) els.fileDoc.click();
+      else if (action === "media" && els.fileMedia) els.fileMedia.click();
     });
 
     /* إغلاق القائمة عند الضغط خارجها */
@@ -1978,6 +1979,11 @@ a{ color:var(--accent-1); text-decoration:none; }
     });
 
     on(els.fileDoc, "change", (e) => {
+      addFiles(e.target.files);
+      e.target.value = "";
+    });
+
+    on(els.fileMedia, "change", (e) => {
       addFiles(e.target.files);
       e.target.value = "";
     });
@@ -2213,49 +2219,54 @@ a{ color:var(--accent-1); text-decoration:none; }
   }
 
   /* ======================================================================
-     13) الاتصال بـ الخدمة
+     13) الاتصال بـ xAI Grok API
      ====================================================================== */
 
-  /** بناء محتوى المحادثة المُرسَل للنموذج */
-  function buildContents(session) {
+  /** بناء محتوى المحادثة المُرسَل للنموذج بصيغة OpenAI (متوافقة مع xAI) */
+  function buildMessages(session) {
     const msgs = session.messages.slice(-CONFIG.MAX_HISTORY);
-    const contents = [];
+    const out = [];
+
+    // إضافة تعليمات النظام أولاً
+    out.push({ role: "system", content: SYSTEM_INSTRUCTIONS });
 
     msgs.forEach((m) => {
-      const parts = [];
+      const role = m.role === "model" ? "assistant" : "user";
 
-      if (m.text && m.text.trim()) {
-        parts.push({ text: m.text });
-      }
-
+      // إذا كانت الرسالة تحتوي على صور
       if (m.images && m.images.length) {
+        const content = [];
+
+        // إضافة الصور
         m.images.forEach((img) => {
           if (!img || !img.dataUrl) return;
-          const base64 = String(img.dataUrl).split(",")[1];
-          if (!base64) return;
-          parts.push({
-            inlineData: {
-              mimeType: img.mime || "image/jpeg",
-              data: base64
-            }
+          content.push({
+            type: "input_image",
+            image_url: img.dataUrl
           });
         });
+
+        // إضافة النص
+        if (m.text && m.text.trim()) {
+          content.push({
+            type: "input_text",
+            text: m.text
+          });
+        }
+
+        out.push({ role, content });
+      } else {
+        // رسالة نصية عادية
+        out.push({ role, content: m.text || "" });
       }
-
-      if (!parts.length) parts.push({ text: "" });
-
-      contents.push({
-        role: m.role === "model" ? "model" : "user",
-        parts: parts
-      });
     });
 
-    return contents;
+    return out;
   }
 
   function getApiKey() {
     try {
-      const stored = sessionStorage.getItem("hazouma_api_key");
+      const stored = sessionStorage.getItem("hazouma_xai_api_key");
       if (stored && stored.trim()) return stored.trim();
     } catch (e) {}
     return String(CONFIG.API_KEY || "").trim();
@@ -2263,69 +2274,48 @@ a{ color:var(--accent-1); text-decoration:none; }
 
   function askForApiKey() {
     const current = getApiKey();
-    if (current && current !== "ضع_مفتاحك_هنا") return current;
+    if (current && current !== "ضع_مفتاح_xAI_هنا") return current;
 
     const entered = window.prompt(
-      "دخل مفتاح الخدمة الجديد هنا.\n\n" +
+      "دخل مفتاح xAI API الخاص بك هنا.\n\n" +
       "ملاحظة: المفتاح لن يتم وضعه داخل ملف HTML، وسيتم الاحتفاظ به لهذه الجلسة فقط."
     );
 
     const key = String(entered || "").trim();
     if (!key) return "";
 
-    try { sessionStorage.setItem("hazouma_api_key", key); } catch (e) {}
+    try { sessionStorage.setItem("hazouma_xai_api_key", key); } catch (e) {}
     return key;
   }
 
   /* ======================================================================
-     استدعاء الخدمة
+     استدعاء xAI Grok API
 
-     🔧 الإصلاح الجذري:
-     مفاتيح Gemini الحديثة (تبدأ بـ AQ.) ومفاتيح Gemini القديمة (تبدأ بـ
-     AIzaSy) الاتنين لازم يتبعتوا في نفس الهيدر: x-goog-api-key.
-     إرسال مفتاح AQ. كـ "Authorization: Bearer" هو اللي كان بيسبب خطأ
-     401 UNAUTHENTICATED / ACCESS_TOKEN_TYPE_UNSUPPORTED اللي شايفينه في
-     السكرين شوت. التوثيق الرسمي من Google وتقارير مطورين كتير أكدوا إن
-     x-goog-api-key هو الهيدر الصحيح للنوعين مع endpoint الـ REST بتاع
-     generateContent.
+     📡 نقطة النهاية: https://api.x.ai/v1/chat/completions
+     🔑 المصادقة: Authorization: Bearer ${API_KEY}
+     🤖 النموذج: grok-4.7 (الأحدث والأقوى)
      ====================================================================== */
 
   async function callModel(session) {
     const apiKey = getApiKey();
-    if (!apiKey || apiKey === "ضع_مفتاحك_هنا") {
+    if (!apiKey || apiKey === "ضع_مفتاح_xAI_هنا") {
       throw new Error("NO_API_KEY");
     }
 
-    /* نستخدم رابط generateContent الأساسي */
-    const url =
-      "https://generativelanguage.googleapis.com/v1beta/models/" +
-      CONFIG.MODEL +
-      ":generateContent";
+    const url = CONFIG.API_URL;
 
     const body = {
-      systemInstruction: {
-        parts: [{ text: SYSTEM_INSTRUCTIONS }]
-      },
-      contents: buildContents(session),
-      generationConfig: {
-        temperature: CONFIG.TEMPERATURE,
-        topP: 0.95,
-        topK: 40,
-        maxOutputTokens: 4096
-      },
-      safetySettings: [
-        { category: "HARM_CATEGORY_HARASSMENT",        threshold: "BLOCK_ONLY_HIGH" },
-        { category: "HARM_CATEGORY_HATE_SPEECH",       threshold: "BLOCK_ONLY_HIGH" },
-        { category: "HARM_CATEGORY_SEXUALLY_EXPLICIT", threshold: "BLOCK_ONLY_HIGH" },
-        { category: "HARM_CATEGORY_DANGEROUS_CONTENT", threshold: "BLOCK_ONLY_HIGH" }
-      ]
+      model: CONFIG.MODEL,
+      messages: buildMessages(session),
+      temperature: CONFIG.TEMPERATURE,
+      max_tokens: 4096,
+      top_p: 0.95,
+      stream: false
     };
 
-    /* كل أنواع المفاتيح (AIzaSy... القديم و AQ.... الحديث) بتتبعت بنفس
-       الطريقة: هيدر x-goog-api-key. مفيش داعي لأي تفرقة بينهم. */
     const headers = {
       "Content-Type": "application/json",
-      "x-goog-api-key": apiKey
+      "Authorization": "Bearer " + apiKey
     };
 
     let response;
@@ -2336,7 +2326,6 @@ a{ color:var(--accent-1); text-decoration:none; }
         body: JSON.stringify(body)
       });
     } catch (networkErr) {
-      /* فشل fetch نفسه (لا إنترنت / CORS / تم حظر النطاق) */
       throw new Error("Failed to fetch: " + (networkErr && networkErr.message ? networkErr.message : "network error"));
     }
 
@@ -2349,32 +2338,23 @@ a{ color:var(--accent-1); text-decoration:none; }
 
     if (!response.ok) {
       const apiMsg =
-        (data && data.error && data.error.message) ||
+        (data && data.error && (data.error.message || data.error.type)) ||
         ("HTTP " + response.status);
       throw new Error(apiMsg);
     }
 
-    const candidate =
-      data && data.candidates && data.candidates[0];
-
-    if (!candidate) {
-      const blockReason =
-        data && data.promptFeedback && data.promptFeedback.blockReason;
-      if (blockReason) {
-        throw new Error("تم حجب الرد بسبب سياسات السلامة (" + blockReason + ")");
-      }
+    const choice = data && data.choices && data.choices[0];
+    if (!choice) {
       throw new Error("النموذج مرجّعش أي رد.");
     }
 
-    const parts = (candidate.content && candidate.content.parts) || [];
-    const text = parts.map((p) => p.text || "").join("").trim();
-
-    if (!text) {
-      const finish = candidate.finishReason || "غير معروف";
+    const text = (choice.message && choice.message.content) || "";
+    if (!text.trim()) {
+      const finish = choice.finish_reason || "غير معروف";
       throw new Error("الرد فاضي (السبب: " + finish + ")");
     }
 
-    return text;
+    return text.trim();
   }
 
   /* ======================================================================
@@ -2390,10 +2370,10 @@ a{ color:var(--accent-1); text-decoration:none; }
 
     if (!rawText && !hasAttachments) return;
 
-    /* الحصول على مفتاح الجلسة (من الثابت بالأعلى، أو بيطلبه لو مش موجود) */
+    /* الحصول على مفتاح xAI API */
     const apiKey = askForApiKey();
     if (!apiKey) {
-      toast("🔑 لم يتم إدخال مفتاح الخدمة.");
+      toast("🔑 لم يتم إدخال مفتاح xAI API.");
       return;
     }
 
@@ -2477,21 +2457,21 @@ a{ color:var(--accent-1); text-decoration:none; }
       const msg = (error && error.message) ? error.message : "";
 
       if (/^NO_API_KEY$/.test(msg)) {
-        friendly = "🔑 **مفتاح الخدمة مش موجود.**\n\nدخل مفتاح جديد وجرب تاني.";
+        friendly = "🔑 **مفتاح xAI API مش موجود.**\n\nدخل مفتاح جديد وجرب تاني.";
       } else if (/API key not valid|API_KEY_INVALID|invalid.*key|invalid authentication credentials|UNAUTHENTICATED|ACCESS_TOKEN_TYPE_UNSUPPORTED|API_KEY_SERVICE_BLOCKED/i.test(msg)) {
-        friendly = "🔑 **مفتاح الخدمة غير صالح أو محظور.**\n\nروح على aistudio.google.com/apikey واتأكد إن المفتاح شغال، أو اعمل مفتاح جديد كامل من غير مسافات أو علامات اقتباس إضافية.";
+        friendly = "🔑 **مفتاح xAI API غير صالح أو محظور.**\n\nروح على console.x.ai واتأكد إن المفتاح شغال، أو اعمل مفتاح جديد كامل من غير مسافات أو علامات اقتباس إضافية.";
       } else if (/permission denied|PERMISSION_DENIED|403/i.test(msg)) {
-        friendly = "🚫 **المشروع أو مفتاح الاتصال مرفوض.**\n\nراجع حالة المفتاح والمشروع وصلاحيات الخدمة في لوحة إعداد المفتاح.";
-      } else if (/quota|RESOURCE_EXHAUSTED|429/i.test(msg)) {
-        friendly = "⏳ **وصلنا للحد الأقصى من الطلبات.**\n\nاستنى شوية وجرّب تاني.";
+        friendly = "🚫 **المشروع أو مفتاح الاتصال مرفوض.**\n\nراجع حالة المفتاح والمشروع وصلاحيات الخدمة في لوحة إعداد xAI.";
+      } else if (/quota|RESOURCE_EXHAUSTED|429|rate.?limit/i.test(msg)) {
+        friendly = "⏳ **وصلنا للحد الأقصى من الطلبات أو الرصيد خلص.**\n\nاستنى شوية أو اشحن رصيدك في حساب xAI وجرّب تاني.";
       } else if (/Failed to fetch|NetworkError|Load failed/i.test(msg)) {
         friendly = "📡 **في مشكلة في الاتصال بالإنترنت أو الخدمة محجوبة.**\n\nاتأكد من الشبكة، ولو بتفتح الملف من `file://` جرّب تشغّله عن طريق سيرفر محلي (Live Server) بدل الفتح المباشر.";
       } else if (/safety|blocked|حجب/i.test(msg)) {
         friendly = "🛡️ **الرد اتحجب بسبب سياسات السلامة.**\n\nجرّب تعيد صياغة سؤالك بشكل مختلف.";
       } else if (/400|invalid argument|INVALID_ARGUMENT/i.test(msg)) {
         friendly = "⚠️ **الخدمة رفضت بيانات الطلب.**\n\nراجع الرسالة أو المرفقات، ولو المشكلة مستمرة افتح Console وشوف نص الخطأ الأصلي.";
-      } else if (/404|not found|NOT_FOUND|no longer available/i.test(msg)) {
-        friendly = "🔎 **النموذج غير متاح من مشروعك.**\n\nالكود يستخدم `" + CONFIG.MODEL + "` — راجع النماذج المتاحة من إعدادات المشروع.";
+      } else if (/404|not found|NOT_FOUND|no longer available|model/i.test(msg)) {
+        friendly = "🔎 **النموذج غير متاح.**\n\nالكود يستخدم `" + CONFIG.MODEL + "` — تأكد إن ده النموذج الصحيح من لوحة تحكم xAI.";
       } else if (msg) {
         friendly = "⚠️ **حصل خطأ:**\n\n`" + msg + "`";
       }
@@ -2624,7 +2604,7 @@ a{ color:var(--accent-1); text-decoration:none; }
       if (e.cancelable) e.preventDefault();
     }, { passive: false });
 
-    console.log("%c⚡ Hazouma جاهز للعمل!", "color:#8ab4f8;font-size:14px;font-weight:bold;");
+    console.log("%c⚡ Hazouma جاهز للعمل مع Grok 4.7!", "color:#8ab4f8;font-size:14px;font-weight:bold;");
   }
 
   /* تشغيل التطبيق */
