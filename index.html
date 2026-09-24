@@ -607,9 +607,9 @@ a{color:var(--accent);text-decoration:none}
 
       <div class="topbar-spacer"></div>
 
-      <div class="model-chip" title="مدعوم بـ Gemini 3.5 Flash">
+      <div class="model-chip" title="مدعوم بـ Gemini">
         <span class="live-dot"></span>
-        <span>Hazouma AI 1.1</span>
+        <span>Hazouma AI</span>
       </div>
     </header>
 
@@ -722,6 +722,9 @@ a{color:var(--accent);text-decoration:none}
 /* ==========================================================================
    Hazouma AI — Frontend
    المطور: حازم
+   ملاحظة: مفيش أي مفتاح API أو أي حاجة حساسة هنا خالص. الواجهة بتكلم
+   السيرفر بتاعنا بس على /api/chat، وهو اللي بيتصل بـ Gemini من وراء الكواليس
+   باستخدام مفتاح مخزّن في متغيرات بيئة Vercel (GEMINI_API_KEY).
    ========================================================================== */
 (function () {
   "use strict";
@@ -738,7 +741,7 @@ a{color:var(--accent);text-decoration:none}
 - بتشجع المستخدم يتعلم ويجرب بنفسه.
 `.trim();
 
-  const API_ENDPOINT = "/api/chat"; // الدالة السيرفرلس على Vercel
+  const API_ENDPOINT = "/api/chat"; // الدالة السيرفرلس على Vercel — هي الوحيدة اللي شايفة المفتاح
 
   const $ = (id) => document.getElementById(id);
 
@@ -1272,7 +1275,7 @@ a{color:var(--accent);text-decoration:none}
     ta.remove();
   }
 
-  // ========== API Call ==========
+  // ========== API Call (بتكلم /api/chat بتاعنا بس — مفيش مفتاح هنا خالص) ==========
   function buildGeminiContents(session) {
     const msgs = session.messages.slice(-20);
     const contents = [];
@@ -1309,10 +1312,20 @@ a{color:var(--accent);text-decoration:none}
     if (!response.ok) {
       let errText = "";
       try { errText = await response.text(); } catch (e) {}
-      throw new Error(errText || ("HTTP " + response.status));
+      const err = new Error(errText || ("HTTP " + response.status));
+      err.status = response.status;
+      throw err;
     }
 
     return response.body; // ReadableStream of SSE
+  }
+
+  function parseApiErrorMessage(rawText) {
+    try {
+      const json = JSON.parse(rawText);
+      if (json && json.error) return typeof json.error === "string" ? json.error : (json.error.message || JSON.stringify(json.error));
+    } catch (e) {}
+    return rawText;
   }
 
   // ========== Send Handler ==========
@@ -1407,19 +1420,32 @@ a{color:var(--accent);text-decoration:none}
       }
 
       // Final render
-      botTextEl.innerHTML = formatMarkdown(fullText);
+      botTextEl.innerHTML = formatMarkdown(fullText || "⚠️ الموديل رجّع رد فاضي، جرّب تاني.");
 
       session.messages.push({ role: "model", text: fullText, images: [] });
       saveState();
 
     } catch (error) {
       removeTypingIndicator(typingId);
-      const msg = (error && error.message) || "";
+      const rawMsg = (error && error.message) || "";
+      const apiMsg = parseApiErrorMessage(rawMsg);
+      const status = error && error.status;
       let friendly = "😅 حصلت مشكلة وأنا بجهّز الرد.";
-      if (/quota|429|RESOURCE_EXHAUSTED/i.test(msg)) friendly = "⏳ وصلنا للحد الأقصى من الطلبات. استنى شوية وجرّب تاني.";
-      else if (/Failed to fetch|NetworkError/i.test(msg)) friendly = "📡 في مشكلة في الاتصال. اتأكد من الشبكة.";
-      else if (/401|403|API key/i.test(msg)) friendly = "🔑 في مشكلة في إعدادات المفتاح على السيرفر. تواصل مع المطور.";
-      else if (msg) friendly = "⚠️ **حصل خطأ:**\n\n`" + msg + "`";
+
+      if (status === 500 && /GEMINI_API_KEY/i.test(rawMsg)) {
+        friendly = "🔧 السيرفر مش مظبوط لسه (متغير GEMINI_API_KEY مش موجود على Vercel). كلّم المطوّر.";
+      } else if (status === 400 || /API key not valid|API_KEY_INVALID/i.test(rawMsg)) {
+        friendly = "🔑 في مشكلة في مفتاح الـ API على السيرفر. كلّم المطوّر.";
+      } else if (status === 403) {
+        friendly = "⛔ الوصول مرفوض من Gemini (403). كلّم المطوّر يتأكد من إعدادات المفتاح.";
+      } else if (status === 429 || /quota|RESOURCE_EXHAUSTED/i.test(rawMsg)) {
+        friendly = "⏳ وصلنا للحد الأقصى من الطلبات حاليًا. استنى شوية وجرّب تاني.";
+      } else if (/Failed to fetch|NetworkError/i.test(rawMsg)) {
+        friendly = "📡 في مشكلة في الاتصال. اتأكد من الشبكة.";
+      } else if (apiMsg) {
+        friendly = "⚠️ **حصل خطأ:**\n\n`" + apiMsg + "`";
+      }
+
       renderBotMessage(friendly, true);
       console.error("API Error:", error);
     } finally {
